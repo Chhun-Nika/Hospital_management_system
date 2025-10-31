@@ -5,7 +5,7 @@ import 'package:hospital_management_system/domain/time_slot.dart';
 class Receptionist extends Staff {
   final List<String> _patientIds;
   final List<String> _appointmentIds;
-  final Map<DateTime, List<TimeSlot>> _workingSchedule;
+  final Map<DayOfWeek, List<TimeSlot>> _workingSchedule;
 
   Receptionist({
     String? id,
@@ -13,7 +13,7 @@ class Receptionist extends Staff {
     required String role,
     required super.phoneNumber,
     required super.email,
-    Map<DateTime, List<TimeSlot>>? workingSchedule,
+    Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
   }) : _workingSchedule = workingSchedule ?? {},
        _patientIds = [],
        _appointmentIds = [],
@@ -21,5 +21,5 @@ class Receptionist extends Staff {
 
   List<String> get patientIds => _patientIds;
   List<String> get appointmentIds => _appointmentIds;
-  Map<DateTime, List<TimeSlot>> get workingSchedule => _workingSchedule;
+  Map<DayOfWeek, List<TimeSlot>> get workingSchedule => _workingSchedule;
 }
