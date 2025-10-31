@@ -14,6 +14,7 @@ class Doctor extends Staff {
   Doctor({
     String? id,
     required super.name,
+    required super.gender,
     required super.role,
     required super.phoneNumber,
     required super.email,

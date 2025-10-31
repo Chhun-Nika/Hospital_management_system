@@ -9,6 +9,7 @@ class Nurse extends Staff {
   Nurse({
     String? id,
     required super.name,
+    required super.gender,
     required String role,
     required super.phoneNumber,
     required super.email,

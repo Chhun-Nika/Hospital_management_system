@@ -10,6 +10,7 @@ class Receptionist extends Staff {
   Receptionist({
     String? id,
     required super.name,
+    required super.gender,
     required String role,
     required super.phoneNumber,
     required super.email,
