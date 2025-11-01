@@ -10,8 +10,9 @@ class Doctor extends Staff {
   // store the time or slots that has been booked - avoid overlapping appointment dateTime
   final Map<DateTime, List<TimeSlot>> _bookedSlots;
 
-  // using super to call 
+  // using super to call
   Doctor({
+    String? id,
     required super.name,
     required super.gender,
     required super.phoneNumber,
@@ -23,5 +24,5 @@ class Doctor extends Staff {
        _workingSchedule = workingSchedule ?? {},
        _bookedSlots = bookedSlots ?? {},
        _appointmentIds = [],
-       super(role: Role.doctor);
+       super(staffId: id, role: Role.doctor);
 }

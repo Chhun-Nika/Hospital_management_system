@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:hospital_management_system/domain/admin.dart';
-import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:test/test.dart';
 
@@ -13,6 +10,7 @@ void main() {
       name: "nika",
       email: "nika@gmail.com",
       phoneNumber: "0123456789",
+      gender: Gender.female
     );
   });
 
@@ -24,6 +22,7 @@ void main() {
           email: "Bob@hospital.com",
           phoneNumber: "012444555",
           specialization: "Cardiology",
+          gender: Gender.male
         );
         expect(doctor1.role, equals(Role.doctor));
       });

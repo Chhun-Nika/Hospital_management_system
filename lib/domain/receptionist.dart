@@ -11,14 +11,13 @@ class Receptionist extends Staff {
     String? id,
     required super.name,
     required super.gender,
-    required String role,
     required super.phoneNumber,
     required super.email,
     Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
   }) : _workingSchedule = workingSchedule ?? {},
        _patientIds = [],
        _appointmentIds = [],
-       super(staffId: id, role: Role.receptionist);
+       super(role: Role.receptionist, staffId: id);
 
   List<String> get patientIds => _patientIds;
   List<String> get appointmentIds => _appointmentIds;

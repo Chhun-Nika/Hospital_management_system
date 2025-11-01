@@ -8,6 +8,7 @@ class Nurse extends Staff {
 
   // using named constructor in order to make the constructor private so it cannot be instantiated outside the class and other subclass 
   Nurse({
+    String? id,
     required super.name,
     required super.gender,
     required super.phoneNumber,
@@ -16,7 +17,7 @@ class Nurse extends Staff {
     Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
   }) : _doctorId = doctorId,
        _workingSchedule = workingSchedule ?? {},
-       super(role: Role.nurse);
+       super(role: Role.nurse, staffId: id);
 
   String get doctorId => _doctorId;
   Map<DayOfWeek, List<TimeSlot>> get workingSchedule => _workingSchedule;
