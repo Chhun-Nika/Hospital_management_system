@@ -13,6 +13,7 @@ class Doctor extends Staff {
   // using super to call 
   Doctor({
     required super.name,
+    required super.gender,
     required super.phoneNumber,
     required super.email,
     required String specialization,
