@@ -12,10 +12,8 @@ class Doctor extends Staff {
 
   // using super to call 
   Doctor({
-    String? id,
     required super.name,
     required super.gender,
-    required super.role,
     required super.phoneNumber,
     required super.email,
     required String specialization,
@@ -25,5 +23,5 @@ class Doctor extends Staff {
        _workingSchedule = workingSchedule ?? {},
        _bookedSlots = bookedSlots ?? {},
        _appointmentIds = [],
-       super(staffId: id);
+       super(role: Role.doctor);
 }
