@@ -1,0 +1,169 @@
+{
+  "doctors": [
+    {
+      "staffId": "d001",
+      "name": "Dr. Sok Dara",
+      "gender": "Male",
+      "role": "Doctor",
+      "phoneNumber": "0123456789",
+      "email": "sok.dara@hospital.com",
+      "specialization": "Cardiology",
+      "appointmentIds": ["apt-001", "apt-002"],
+      "workingSchedule": {
+        "Monday": [{ "start": "08:00", "end": "16:00" }],
+        "Wednesday": [{ "start": "08:00", "end": "16:00" }],
+        "Friday": [{ "start": "08:00", "end": "12:00" }]
+      },
+      "bookedSlots": {
+        "2025-10-31": [{ "start": "09:00", "end": "09:30" }]
+      }
+    },
+    {
+      "staffId": "d002",
+      "name": "Dr. Chan Borey",
+      "gender": "Male",
+      "role": "Doctor",
+      "phoneNumber": "011223344",
+      "email": "chan.borey@hospital.com",
+      "specialization": "Dermatology",
+      "appointmentIds": ["apt-003"],
+      "workingSchedule": {
+        "Tuesday": [{ "start": "08:00", "end": "16:00" }],
+        "Thursday": [{ "start": "08:00", "end": "16:00" }]
+      },
+      "bookedSlots": {}
+    },
+    {
+      "staffId": "d003",
+      "name": "Dr. Khemara Chann",
+      "gender": "Male",
+      "role": "Doctor",
+      "phoneNumber": "098112233",
+      "email": "khemara.chann@hospital.com",
+      "specialization": "Pediatrics",
+      "appointmentIds": ["apt-004", "apt-005"],
+      "workingSchedule": {
+        "Monday": [{ "start": "09:00", "end": "17:00" }],
+        "Wednesday": [{ "start": "09:00", "end": "17:00" }]
+      },
+      "bookedSlots": {
+        "2025-10-30": [{ "start": "10:00", "end": "10:30" }]
+      }
+    },
+    {
+      "staffId": "d004",
+      "name": "Dr. Neary Chan",
+      "gender": "Female",
+      "role": "Doctor",
+      "phoneNumber": "088998877",
+      "email": "neary.chan@hospital.com",
+      "specialization": "Neurology",
+      "appointmentIds": [],
+      "workingSchedule": {
+        "Tuesday": [{ "start": "08:00", "end": "12:00" }],
+        "Thursday": [{ "start": "13:00", "end": "17:00" }]
+      },
+      "bookedSlots": {}
+    },
+    {
+      "staffId": "d005",
+      "name": "Dr. Rith Piseth",
+      "gender": "Male",
+      "role": "Doctor",
+      "phoneNumber": "097554433",
+      "email": "rith.piseth@hospital.com",
+      "specialization": "Orthopedics",
+      "appointmentIds": ["apt-006"],
+      "workingSchedule": {
+        "Monday": [{ "start": "08:00", "end": "16:00" }],
+        "Friday": [{ "start": "08:00", "end": "16:00" }]
+      },
+      "bookedSlots": {}
+    }
+  ],
+  "nurses": [
+    {
+      "staffId": "n001",
+      "name": "Nurse Sokha Lim",
+      "gender": "Female",
+      "role": "Nurse",
+      "phoneNumber": "015667788",
+      "email": "sokha.lim@hospital.com",
+      "doctorId": "d001",
+      "workingSchedule": {
+        "Monday": [{ "start": "07:30", "end": "15:30" }],
+        "Wednesday": [{ "start": "07:30", "end": "15:30" }],
+        "Friday": [{ "start": "07:30", "end": "12:00" }]
+      }
+    },
+    {
+      "staffId": "n002",
+      "name": "Nurse Borey Eng",
+      "gender": "Female",
+      "role": "Nurse",
+      "phoneNumber": "010223344",
+      "email": "borey.eng@hospital.com",
+      "doctorId": "d002",
+      "workingSchedule": {
+        "Tuesday": [{ "start": "08:00", "end": "16:00" }],
+        "Thursday": [{ "start": "08:00", "end": "16:00" }]
+      }
+    },
+    {
+      "staffId": "n003",
+      "name": "Nurse Rina Chhun",
+      "gender": "Female",
+      "role": "Nurse",
+      "phoneNumber": "011556677",
+      "email": "rina.chhun@hospital.com",
+      "doctorId": "d003",
+      "workingSchedule": {
+        "Monday": [{ "start": "09:00", "end": "17:00" }],
+        "Wednesday": [{ "start": "09:00", "end": "17:00" }]
+      }
+    },
+    {
+      "staffId": "n004",
+      "name": "Nurse Dary Meas",
+      "gender": "Female",
+      "role": "Nurse",
+      "phoneNumber": "012998877",
+      "email": "dary.meas@hospital.com",
+      "doctorId": "d004",
+      "workingSchedule": {
+        "Tuesday": [{ "start": "08:00", "end": "12:00" }],
+        "Thursday": [{ "start": "13:00", "end": "17:00" }]
+      }
+    },
+    {
+      "staffId": "n005",
+      "name": "Nurse Sareth Kong",
+      "gender": "Male",
+      "role": "Nurse",
+      "phoneNumber": "013887766",
+      "email": "sareth.kong@hospital.com",
+      "doctorId": "d005",
+      "workingSchedule": {
+        "Monday": [{ "start": "08:00", "end": "16:00" }],
+        "Friday": [{ "start": "08:00", "end": "16:00" }]
+      }
+    }
+  ],
+  "receptionist": {
+    "staffId": "r001",
+    "name": "Ms. Lina Phan",
+    "gender": "Female",
+    "role": "Receptionist",
+    "phoneNumber": "099112233",
+    "email": "lina.phan@hospital.com",
+    "patientIds": ["p001", "p002", "p003", "p004", "p005"],
+    "appointmentIds": ["apt-001", "apt-002", "apt-003", "apt-004", "apt-005", "apt-006"],
+    "workingSchedule": {
+      "Monday": [{ "start": "08:00", "end": "17:00" }],
+      "Tuesday": [{ "start": "08:00", "end": "17:00" }],
+      "Wednesday": [{ "start": "08:00", "end": "17:00" }],
+      "Thursday": [{ "start": "08:00", "end": "17:00" }],
+      "Friday": [{ "start": "08:00", "end": "17:00" }]
+    }
+  }
+}
