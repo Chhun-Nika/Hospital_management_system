@@ -20,6 +20,8 @@ class Appointment {
     required DateTime dateTime,
     int? duration,
     String? reasons,
+    required AppointmentStatus appointmentStatus,
+    String? doctorNotes, 
   }) : _appointmentId = id ?? uuid.v4(),
        _patientId = patientId,
        _doctorId = doctorId,
@@ -27,7 +29,15 @@ class Appointment {
        _duration = duration ?? 2,
        _reason = reasons,
        // every new appoinment that is created will set to 'schedule'
-       _appointmentStatus = AppointmentStatus.scheduled;
+       _appointmentStatus = AppointmentStatus.scheduled,
+       _doctorNotes = doctorNotes;
 
-
+  String get appointmentId => _appointmentId;
+  String get patientId => _patientId;
+  String get doctorId => _doctorId;
+  DateTime get appointmentDateTime => _appointmentDateTime;
+  int get duration => _duration;
+  String? get reason => _reason;
+  AppointmentStatus get appointmentStatus => _appointmentStatus;
+  String? get doctorNotes => _doctorNotes;
 }
