@@ -1,3 +1,4 @@
+import 'package:hospital_management_system/domain/enums.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
@@ -5,7 +6,7 @@ var uuid = Uuid();
 class Patient {
   final String _patientId;
   String _fullName;
-  String _gender;
+  Gender _gender;
   DateTime _dateOfBirth;
   String _phoneNumber;
   String _address;
@@ -16,7 +17,7 @@ class Patient {
   Patient({
     String? patientId,
     required String fullName,
-    required String gender,
+    required Gender gender,
     required DateTime dateOfBirth,
     required String phoneNumber,
     required String address,
@@ -35,7 +36,7 @@ class Patient {
 
   String get patientId => _patientId;
   String get fullName => _fullName;
-  String get gender => _gender;
+  Gender get gender => _gender;
   DateTime get dateOfBirth => _dateOfBirth;
   String get phoneNumber => _phoneNumber;
   String get address => _address;
