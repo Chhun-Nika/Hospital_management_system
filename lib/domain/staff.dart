@@ -5,30 +5,50 @@ var uuid = Uuid();
 
 abstract class Staff {
   final String _staffId;
-  String _name;
-  Gender _gender;
+  String name;
+  Gender gender;
   Role _role;
   String _phoneNumber;
   String _email;
 
   Staff({
     String? staffId,
-    required String name,
-    required Gender gender,
+    required this.name,
+    required this.gender,
     required Role role,
     required String phoneNumber,
     required String email,
   }) : _staffId = staffId ?? uuid.v4(),
-       _name = name,
-       _gender = gender,
        _role = role,
-       _phoneNumber = phoneNumber,
-       _email = email;
+       _phoneNumber = _validatePhoneNumber(phoneNumber),
+       _email = _validateEmail(email);
+
 
   String get staffId => _staffId;
-  String get name => _name;
-  Gender get gender => _gender;
   Role get role => _role;
   String get phoneNumber => _phoneNumber;
   String get email => _email;
+
+
+  set phoneNumber (String value) {
+    _phoneNumber = _validatePhoneNumber(value);
+  }
+
+  set email (String value) {
+    _email = _validateEmail(value);
+  }
+
+  static String _validateEmail (String value) {
+    if (!value.contains('@')) {
+      throw Exception('Invalid email format: $value');
+    }
+    return value;
+  }
+
+  static String _validatePhoneNumber (String value) {
+    if (value.length < 9) {
+      throw Exception('Invalid phone number: $value');
+    }
+    return value;
+  }
 }

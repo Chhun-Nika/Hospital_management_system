@@ -66,6 +66,7 @@ class DoctorRepository {
       final gender = Gender.values.firstWhere((g) => g.name == doc['gender']);
 
       doctors[staffId] = Doctor(
+        id: doc['staffId'],
         name: doc['name'],
         gender: gender,
         phoneNumber: doc['phoneNumber'],
