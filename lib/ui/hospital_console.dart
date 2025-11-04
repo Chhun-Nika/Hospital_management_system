@@ -1,6 +1,0 @@
-class Hospitalconsole {
-  
-  void startHospital() {
-
-  }
-}

@@ -18,11 +18,12 @@ class Doctor extends Staff {
     required super.phoneNumber,
     required super.email,
     required String specialization,
-    Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
+    required Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
     Map<DateTime, List<TimeSlot>>? bookedSlots,
   }) : _specialization = specialization,
        _workingSchedule = workingSchedule ?? {},
        _bookedSlots = bookedSlots ?? {},
        _appointmentIds = [],
        super(staffId: id, role: Role.doctor);
+  
 }
