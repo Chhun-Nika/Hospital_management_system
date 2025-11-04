@@ -1,0 +1,29 @@
+[
+    {
+        "staffId": "n001",
+        "name": "Nurse Sokha Lim",
+        "gender": "female",
+        "role": "Nurse",
+        "phoneNumber": "015667788",
+        "email": "sokha.lim@hospital.com",
+        "doctorId": "d001",
+        "workingSchedule": {
+            "Monday": [{ "start": "07:30", "end": "15:30" }],
+            "Wednesday": [{ "start": "07:30", "end": "15:30" }],
+            "Friday": [{ "start": "07:30", "end": "12:00" }]
+        }
+    },
+    {
+        "staffId": "n002",
+        "name": "Nurse Borey Eng",
+        "gender": "female",
+        "role": "Nurse",
+        "phoneNumber": "010223344",
+        "email": "borey.eng@hospital.com",
+        "doctorId": "d002",
+        "workingSchedule": {
+            "Tuesday": [{ "start": "08:00", "end": "16:00" }],
+            "Thursday": [{ "start": "08:00", "end": "16:00" }]
+        }
+    }
+]
