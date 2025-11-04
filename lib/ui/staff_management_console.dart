@@ -14,10 +14,10 @@ class StaffManagementConsole {
     bool inSubmenu = true;
 
     do {
-      print('-- Staff Management --');
+      print('-- Staff Management --\n');
       print('1. Doctors');
       print('2. Nurses');
-      print('0. Back to Main Menu');
+      print('0. Back to Main Menu\n');
 
       stdout.write('Enter your choice: ');
       String? choice = stdin.readLineSync();

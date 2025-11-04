@@ -10,17 +10,22 @@ class Hospital {
   final Map<String, Appointment> _appointments = {};
   final Map<String, Patient> _patients = {};
 
-  // as the getter returns map, and it will returns its reference, 
+  // as the getter returns map, and it will returns its reference,
   // so set it unmodifiable to avoid accidentally update from the instances of the this class
   // using unmodifiableMapView, uses the existing map for view yet using Map.unmodifiable copy the current Map and create new one
   Map<String, Doctor> get doctors => UnmodifiableMapView(_doctors);
   Map<String, Nurse> get nurses => UnmodifiableMapView(_nurses);
-  Map<String, Appointment> get appointments => UnmodifiableMapView(_appointments);
+  Map<String, Appointment> get appointments =>
+      UnmodifiableMapView(_appointments);
   Map<String, Patient> get patients => UnmodifiableMapView(_patients);
 
   // this function is use to add all doctors from json to current object
-  void addDoctors (Map<String, Doctor> doctors) {
+  void addDoctors(Map<String, Doctor> doctors) {
     _doctors.addAll(doctors);
   }
 
+  // for accessing and selecting each doctors via number instead of id
+  List<MapEntry<String, Doctor>> getDoctorEntries() {
+    return _doctors.entries.toList();
+  }
 }
