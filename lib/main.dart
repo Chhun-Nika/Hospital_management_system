@@ -10,9 +10,9 @@ import 'package:hospital_management_system/ui/staff_management_console.dart';
 void main() {
   clearScreen();
 
-  final doctorRepo = DoctorRepository('lib/data/doctors.json');
-  final patientRepo = PatientRepository('lib/data/patient.json');
-  final appointmentRepo = AppointmentRepository('lib/data/appointment.json');
+  final doctorRepo = DoctorRepository('data/doctors.json');
+  final patientRepo = PatientRepository('data/patient.json');
+  final appointmentRepo = AppointmentRepository('data/appointment.json');
 
   final hospitalRepository = HospitalRepository(
     doctorRepo: doctorRepo,

@@ -22,7 +22,6 @@ abstract class StaffConsole<T extends Staff> {
     } while (userInput.trim().toLowerCase() != 'q');
   }
 
-
   // update Name
   void updateName(MapEntry<String, T> selectedStaff) {
     print("\n-- Update Name --\n");
@@ -46,7 +45,6 @@ abstract class StaffConsole<T extends Staff> {
       }
     } while (true);
   }
-
 
   // update gender
   void updateGender(MapEntry<String, T> selectedStaff) {
@@ -108,7 +106,9 @@ abstract class StaffConsole<T extends Staff> {
           print("\n** Email must contains these symbols: '@' and '.' **\n");
           continue;
         } else if (input == selectedStaff.value.email) {
-          print("\n** New input Specialization is the same as the current specialization. **\n");
+          print(
+            "\n** New input Specialization is the same as the current specialization. **\n",
+          );
         } else {
           selectedStaff.value.email = input;
           print('\n** email is updated! **\n');
@@ -134,7 +134,9 @@ abstract class StaffConsole<T extends Staff> {
           print("\n** The length of phone number must be at least 9 **\n");
           continue;
         } else if (input == selectedStaff.value.phoneNumber) {
-          print("\n** New input Phone number is the same as the current Phone number. **\n");
+          print(
+            "\n** New input Phone number is the same as the current Phone number. **\n",
+          );
         } else {
           selectedStaff.value.phoneNumber = input;
           print('\n** Phone number is updated! **\n');
@@ -147,10 +149,59 @@ abstract class StaffConsole<T extends Staff> {
 
   void updateWorkingSchedule(MapEntry<String, T> selectedStaff) {
     print("\n-- Update Working Schedule --\n");
-    print("** Current Working Schedule: ");
-    final List<MapEntry<DayOfWeek, List<TimeSlot>>> workingSchedule = selectedStaff.value.getWorkingScheduleEntries();
-    
+    print("** Current Working Schedule: \n");
+    final List<MapEntry<DayOfWeek, List<TimeSlot>>> workingSchedule =
+        selectedStaff.value.getWorkingScheduleEntries();
+    int counter = 1;
+    for (var entry in workingSchedule) {
+      final day = entry.key;
+      final slots = entry.value;
+      for (var slot in slots) {
+        print("$counter. ${day.name}: ${slot.startTime} - ${slot.endTime}");
+        counter++;
+      }
+    }
+    print("-------------------------------------------");
+    bool isUpdate = true;
+
+    do {
+      print("\nOptions: ");
+      print('  1. Add new shift');
+      print('  2. Delete shift');
+      print('  0. Exit select option mode');
+
+      stdout.write('\nEnter your choice: ');
+      String input = stdin.readLineSync() ?? '';
+      switch (input.trim()) {
+        case '1':
+          inputAddShift(selectedStaff);
+          break;
+        case '0':
+          isUpdate = false;
+        default:
+      }
+    } while (isUpdate);
+
+    // pressEnterToContinue();
   }
 
+  void inputAddShift(MapEntry<String, T> selectedStaff) {
+    clearScreen();
+    print("-- Add new shift --\n");
+    print("Select day of the week: ");
+    for (var day in DayOfWeek.values) {
+      print("  ${day.index + 1}. ${day.name}");
+    }
 
+    do {
+      stdout.write('\nEnter number:');
+      String input = stdin.readLineSync() ?? '';
+      int? parseInput = int.tryParse(input);
+      if (parseInput == null ||
+          parseInput < 1 ||
+          parseInput > DayOfWeek.values.length) {
+            print("\n** Invalid input. **\n");
+          }
+    } while (true);
+  }
 }

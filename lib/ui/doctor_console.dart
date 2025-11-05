@@ -128,6 +128,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
 
     bool stillUpdate = true;
     String updateInput;
+    String nameFormat = 'Dr. ${selectedDoctor.value.name}';
     do {
       clearScreen();
       print('Dr. ${selectedDoctor.value.name}\'s infromation');
@@ -142,7 +143,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
       ];
       final row = [
         userInput,
-        selectedDoctor.value.name,
+        nameFormat,
         selectedDoctor.value.gender.name,
         selectedDoctor.value.specialization,
         selectedDoctor.value.email,
