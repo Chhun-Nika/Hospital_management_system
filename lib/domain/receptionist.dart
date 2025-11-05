@@ -44,6 +44,7 @@ class Receptionist extends Staff {
       address: address,
       emergencyContact: emergencyContact,
       status: status,
+      appointmentIds: []
     );
   }
 

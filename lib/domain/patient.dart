@@ -5,7 +5,6 @@ var uuid = Uuid();
 
 class Patient {
   final String _patientId;
-  final String _receptionistId;
   String _fullName;
   Gender _gender;
   DateTime _dateOfBirth;
@@ -25,8 +24,8 @@ class Patient {
     required String address,
     required String emergencyContact,
     required String status,
+    required List<String> appointmentIds,
   }) : _patientId = patientId ?? uuid.v4(),
-       _receptionistId = receptionistId ?? uuid.v4(),
        _fullName = fullName,
        _gender = gender,
        _dateOfBirth = dateOfBirth,
@@ -34,7 +33,7 @@ class Patient {
        _address = address,
        _emergencyContact = emergencyContact,
        _status = status,
-       _appointmentIds = [];
+       _appointmentIds = appointmentIds;
 
   String get patientId => _patientId;
   String get fullName => _fullName;
@@ -44,4 +43,5 @@ class Patient {
   String get address => _address;
   String get emergencyContact => _emergencyContact;
   String get status => _status;
+  List get appointmentIds => _appointmentIds;
 }

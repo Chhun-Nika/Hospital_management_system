@@ -24,6 +24,14 @@ class Hospital {
     _doctors.addAll(doctors);
   }
 
+  void addPatients(Map<String, Patient> patients) {
+    _patients.addAll(patients);
+  }
+
+  void addAppointment(Map<String, Appointment> appointments) {
+    _appointments.addAll(appointments);
+  }
+
   // for accessing and selecting each doctors via number instead of id
   List<MapEntry<String, Doctor>> getDoctorEntries() {
     return _doctors.entries.toList();
