@@ -3,10 +3,8 @@ import 'package:hospital_management_system/domain/staff.dart';
 import 'package:hospital_management_system/domain/time_slot.dart';
 
 class Doctor extends Staff {
-  final String _specialization;
+  String _specialization;
   final List<String> _appointmentIds;
-  // store the working schedule of each doctor based on day of the week
-  final Map<DayOfWeek, List<TimeSlot>> _workingSchedule;
   // store the time or slots that has been booked - avoid overlapping appointment dateTime
   final Map<DateTime, List<TimeSlot>> _bookedSlots;
 
@@ -18,17 +16,15 @@ class Doctor extends Staff {
     required super.phoneNumber,
     required super.email,
     required String specialization,
-    required Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
+    required super.workingSchedule,
     Map<DateTime, List<TimeSlot>>? bookedSlots,
   }) : _specialization = specialization,
-       _workingSchedule = workingSchedule ?? {},
        _bookedSlots = bookedSlots ?? {},
        _appointmentIds = [],
        super(staffId: id, role: Role.doctor);
 
 
   String get specialization => _specialization;
-  Map<DayOfWeek, List<TimeSlot>> get workingSchedule => _workingSchedule;
 
   DateTime _dateOnly(DateTime dateTime) {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
@@ -124,6 +120,11 @@ String formatWorkingSchedule () {
   }).join('\n');
 
   return formatted;
+}
+
+
+set specialization (String value) {
+  _specialization = value;
 }
 
 

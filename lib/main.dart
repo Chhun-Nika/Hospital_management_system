@@ -37,9 +37,9 @@ void main() {
     print('0. Exit\n');
 
     stdout.write('Enter your choice: ');
-    String? userInput = stdin.readLineSync();
+    String userInput = stdin.readLineSync() ?? '';
 
-    switch (userInput) {
+    switch (userInput.trim()) {
       case '1':
         clearScreen();
         staffConsole.startStaffManagementConsole();
@@ -55,7 +55,7 @@ void main() {
         exit(0);
       default:
         print('Please input a valid choice');
-        pressEnterToContinue();
+      // pressEnterToContinue();
     }
   } while (true);
 }
@@ -71,7 +71,8 @@ void clearScreen() {
   }
 }
 
-void pressEnterToContinue() {
-  stdout.write('Press Enter to continue...');
+void pressEnterToContinue({String? text}) {
+  text ??= "Press enter to continue";
+  stdout.write('$text...');
   stdin.readLineSync();
 }
