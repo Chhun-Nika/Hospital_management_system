@@ -10,9 +10,9 @@ import 'package:hospital_management_system/ui/staff_management_console.dart';
 void main() {
   clearScreen();
 
-  final doctorRepo = DoctorRepository('data/doctors.json');
-  final patientRepo = PatientRepository('data/patient.json');
-  final appointmentRepo = AppointmentRepository('data/appointment.json');
+  final doctorRepo = DoctorRepository('lib/data/doctors.json');
+  final patientRepo = PatientRepository('lib/data/patient.json');
+  final appointmentRepo = AppointmentRepository('lib/data/appointment.json');
 
   final hospitalRepository = HospitalRepository(
     doctorRepo: doctorRepo,
@@ -64,7 +64,7 @@ void main() {
 void clearScreen() {
   if (Platform.isWindows) {
     // Windows clear
-    Process.runSync('cls', [], runInShell: true);
+    stdout.write('\x1B[2J\x1B[3J\x1B[H');
   } else {
     // macOS/Linux clear + scrollback
     stdout.write('\x1B[2J\x1B[1;1H\x1B[3J');
