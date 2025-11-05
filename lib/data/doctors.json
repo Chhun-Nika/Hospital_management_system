@@ -1,11 +1,11 @@
 [
     {
         "staffId": "d001",
-        "name": "Dr. Sok Dara",
+        "name": "Sok Dara",
         "gender": "male",
         "role": "Doctor",
         "phoneNumber": "0123456789",
-        "email": "sok.dara@hospital.com",
+        "email": "sokdara@hospital.com",
         "specialization": "Cardiology",
         "appointmentIds": ["apt-001", "apt-002"],
         "workingSchedule": {
@@ -19,11 +19,11 @@
     },
     {
         "staffId": "d002",
-        "name": "Dr. Chan Borey",
+        "name": "Chan Borey",
         "gender": "male",
         "role": "Doctor",
         "phoneNumber": "011223344",
-        "email": "chan.borey@hospital.com",
+        "email": "chanborey@hospital.com",
         "specialization": "Dermatology",
         "appointmentIds": ["apt-003"],
         "workingSchedule": {

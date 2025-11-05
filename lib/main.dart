@@ -8,23 +8,24 @@ void main() {
   clearScreen();
 
   final doctorPath = DoctorRepository('data/doctors.json');
-  final HospitalRepository hospitalRepository = HospitalRepository(doctorRepo: doctorPath);
+  final HospitalRepository hospitalRepository = HospitalRepository(
+    doctorRepo: doctorPath,
+  );
   final Hospital hospital;
   hospital = hospitalRepository.loadAll();
 
-  final StaffManagementConsole staffConsole = StaffManagementConsole(hospital: hospital);
-
+  final StaffManagementConsole staffConsole = StaffManagementConsole(
+    hospital: hospital,
+  );
+  print("-- Welcome to Hospital Management System! --\n");
+  print('1. Staffs Management');
+  print('2. Appointments Management');
+  print('0. Exit\n');
   do {
-    clearScreen(); // Clear terminal at the start of each loop
-    print("-- Welcome to Hospital Management System! --\n");
-    print('1. Staffs Management');
-    print('2. Appointments Management');
-    print('0. Exit\n');
-
     stdout.write('Enter your choice: ');
-    String? userInput = stdin.readLineSync();
+    String userInput = stdin.readLineSync() ?? '';
 
-    switch (userInput) {
+    switch (userInput.trim()) {
       case '1':
         clearScreen();
         staffConsole.startStaffManagementConsole();
@@ -36,7 +37,7 @@ void main() {
         exit(0);
       default:
         print('Please input a valid choice');
-        pressEnterToContinue();
+      // pressEnterToContinue();
     }
   } while (true);
 }
@@ -52,7 +53,8 @@ void clearScreen() {
   }
 }
 
-void pressEnterToContinue() {
-  stdout.write('Press Enter to continue...');
+void pressEnterToContinue({String? text}) {
+  text ??= "Press enter to continue";
+  stdout.write('$text...');
   stdin.readLineSync();
 }
