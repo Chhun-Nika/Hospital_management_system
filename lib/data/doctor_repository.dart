@@ -17,6 +17,9 @@ class DoctorRepository {
     }
 
     final contents = file.readAsStringSync();
+    if(contents.trim().isEmpty) {
+      throw Exception("File is empty: $filePath");
+    }
     final data = jsonDecode(contents) as List<dynamic>;
 
     final Map<String, Doctor> doctors = {};

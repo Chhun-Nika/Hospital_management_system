@@ -13,18 +13,19 @@ class StaffManagementConsole {
   void startStaffManagementConsole() {
     bool inSubmenu = true;
 
+    print('-- Staff Management --\n');
+    print('1. Doctors');
+    print('2. Nurses');
+    print('0. Back to Main Menu\n');
+
     do {
-      print('-- Staff Management --\n');
-      print('1. Doctors');
-      print('2. Nurses');
-      print('0. Back to Main Menu\n');
-
       stdout.write('Enter your choice: ');
-      String? choice = stdin.readLineSync();
+      String choice = stdin.readLineSync() ?? '';
 
-      switch (choice) {
+      switch (choice.trim()) {
         case '1':
-          doctorConsole.startDoctorConsole();
+          clearScreen();
+          doctorConsole.startConsole();
           break;
         case '2':
           print('Listing staff...');
@@ -37,11 +38,9 @@ class StaffManagementConsole {
           break;
         default:
           print('Invalid choice. Try again.');
-          stdout.write('Press Enter to continue...');
-          stdin.readLineSync();
       }
 
-      clearScreen();
+      // clearScreen();
     } while (inSubmenu);
   }
 }
