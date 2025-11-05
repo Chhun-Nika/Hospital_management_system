@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/domain/enums.dart';
+import 'package:hospital_management_system/domain/time_of_day.dart';
 import 'package:hospital_management_system/domain/time_slot.dart';
 
 class DoctorRepository {
@@ -17,7 +18,7 @@ class DoctorRepository {
     }
 
     final contents = file.readAsStringSync();
-    if(contents.trim().isEmpty) {
+    if (contents.trim().isEmpty) {
       throw Exception("File is empty: $filePath");
     }
     final data = jsonDecode(contents) as List<dynamic>;
@@ -38,12 +39,20 @@ class DoctorRepository {
 
       workingScheduleData.forEach((day, slots) {
         // final dataSlots = slots as List<dynamic>;
-        final timeSlotList = (slots as List<dynamic>)
-            .map(
-              (slot) =>
-                  TimeSlot(startTime: slot['start'], endTime: slot['end']),
-            )
-            .toList();
+        final timeSlotList = (slots as List<dynamic>).map((slot) {
+          final startParts = (slot['start'] as String).split(':');
+          final endParts = (slot['end'] as String).split(':');
+          final startTime = TimeOfDay(
+            hour: int.parse(startParts[0]),
+            minute: int.parse(startParts[1]),
+          );
+          final endTime = TimeOfDay(
+            hour: int.parse(endParts[0]),
+            minute: int.parse(endParts[1]),
+          );
+
+          return TimeSlot(startTime: startTime, endTime: endTime);
+        }).toList();
         // set day to DayOfWeek type by using firstWhere
         workingSchedule[DayOfWeek.values.firstWhere((d) => d.name == day)] =
             timeSlotList;
@@ -56,12 +65,20 @@ class DoctorRepository {
           : {};
       final Map<DateTime, List<TimeSlot>> bookedSlots = {};
       bookedSlotsData.forEach((date, slots) {
-        final timeSlotsList = (slots as List<dynamic>)
-            .map(
-              (slot) =>
-                  TimeSlot(startTime: slot['start'], endTime: slot['end']),
-            )
-            .toList();
+        final timeSlotsList = (slots as List<dynamic>).map((slot) {
+          final startParts = (slot['start'] as String).split(':');
+          final endParts = (slot['end'] as String).split(':');
+          final startTime = TimeOfDay(
+            hour: int.parse(startParts[0]),
+            minute: int.parse(startParts[1]),
+          );
+          final endTime = TimeOfDay(
+            hour: int.parse(endParts[0]),
+            minute: int.parse(endParts[1]),
+          );
+
+          return TimeSlot(startTime: startTime, endTime: endTime);
+        }).toList();
         bookedSlots[DateTime.parse(date)] = timeSlotsList;
       });
 
@@ -76,7 +93,7 @@ class DoctorRepository {
         email: doc['email'],
         specialization: doc['specialization'],
         workingSchedule: workingSchedule,
-        bookedSlots: bookedSlots
+        bookedSlots: bookedSlots,
       );
     }
     return doctors;

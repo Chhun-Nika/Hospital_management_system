@@ -56,4 +56,57 @@ abstract class Staff {
   List<MapEntry<DayOfWeek, List<TimeSlot>>> getWorkingScheduleEntries() {
     return workingSchedule.entries.toList();
   }
+
+  // handle working schedule management
+  bool addShift(DayOfWeek day, TimeSlot newSlot) {
+    // if the key exists it will return the list of slot
+    // yet if not it will create a new key with the value of empty timeslot list
+    workingSchedule[day] ??= [];
+
+    // checking timeslot overlapping
+    // .any will return false if the list is empty
+    List<TimeSlot> slots = workingSchedule[day]!;
+    bool overlap = slots.any((slot) => _isOverlapping(slot, newSlot));
+    if (overlap) {
+      return false;
+    }
+
+    workingSchedule[day]!.add(newSlot);
+    return true;
+  }
+
+  // bool _isOverlapping (TimeSlot existing, TimeSlot newSlot) {
+  //   final existingStart = existing.startTime;
+  //   final existingEnd = existing.endTime;
+  //   final newStart = newSlot.startTime;
+  //   final newEnd = newSlot.endTime;
+
+  //   bool overlap = true;
+  //   if (newStart.compareTo(existingEnd) < 0 && newEnd.compareTo(existingStart) > 0) {
+  //     overlap = true;
+  //   } else {
+  //     overlap = false;
+  //   }
+
+  //   return overlap;
+
+  // }
+  bool _isOverlapping(TimeSlot existing, TimeSlot newSlot) {
+    final existingStart = existing.startTime;
+    final existingEnd = existing.endTime;
+    final newStart = newSlot.startTime;
+    final newEnd = newSlot.endTime;
+
+    // Overlap exists if newStart < existingEnd && newEnd > existingStart
+    return newStart.isBefore(existingEnd) && newEnd.isAfter(existingStart);
+  }
+
+  bool deleteShift(DayOfWeek day, TimeSlot slotToDelete) {
+    if (!workingSchedule.containsKey(day)) {
+      return false;
+    }
+
+    // To make this work, TimeSlot needs proper equality comparison
+    return workingSchedule[day]!.remove(slotToDelete);
+  }
 }
