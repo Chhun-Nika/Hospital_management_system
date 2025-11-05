@@ -1,24 +1,39 @@
 import 'dart:io';
+import 'package:hospital_management_system/data/appointment_repository.dart';
 import 'package:hospital_management_system/data/doctor_repository.dart';
 import 'package:hospital_management_system/data/hospital_repository.dart';
+import 'package:hospital_management_system/data/patient_repository.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
+import 'package:hospital_management_system/ui/patient_management_console.dart';
 import 'package:hospital_management_system/ui/staff_management_console.dart';
 
 void main() {
   clearScreen();
 
-  final doctorPath = DoctorRepository('data/doctors.json');
-  final HospitalRepository hospitalRepository = HospitalRepository(doctorRepo: doctorPath);
-  final Hospital hospital;
-  hospital = hospitalRepository.loadAll();
+  final doctorRepo = DoctorRepository('lib/data/doctors.json');
+  final patientRepo = PatientRepository('lib/data/patient.json');
+  final appointmentRepo = AppointmentRepository('lib/data/appointment.json');
 
-  final StaffManagementConsole staffConsole = StaffManagementConsole(hospital: hospital);
+  final hospitalRepository = HospitalRepository(
+    doctorRepo: doctorRepo,
+    patientRepo: patientRepo,
+    appointmentRepo: appointmentRepo
+  );
+
+  final Hospital hospital = hospitalRepository.loadAll();
+
+  final StaffManagementConsole staffConsole = StaffManagementConsole(
+    hospital: hospital,
+  );
+
+  final PatientConsole patientConsole = PatientConsole(hospital: hospital);
 
   do {
     clearScreen(); // Clear terminal at the start of each loop
     print("-- Welcome to Hospital Management System! --\n");
     print('1. Staffs Management');
     print('2. Appointments Management');
+    print('3. Patient Management');
     print('0. Exit\n');
 
     stdout.write('Enter your choice: ');
@@ -31,6 +46,10 @@ void main() {
         break;
       case '2':
         print('hello');
+        break;
+      case '3':
+        clearScreen();
+        patientConsole.startPatientConsole();
         break;
       case '0':
         exit(0);

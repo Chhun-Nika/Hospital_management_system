@@ -110,4 +110,21 @@ class Doctor extends Staff {
   _bookedSlots[dayKey]!.add(newSlot);
 }
 
+// for updates
+void updateInformation ({String? name, Gender? gender, String? email, String? phoneNumber, String? specialization}) {
+  if (name != null) this.name = name;
+}
+
+// format working schedule
+String formatWorkingSchedule () {
+  final formatted = workingSchedule.entries.map((entry) {
+    final day = entry.key.name;
+    final time = entry.value.map((t) => "${t.startTime} - ${t.endTime}");
+    return "$day : $time";
+  }).join('\n');
+
+  return formatted;
+}
+
+
 }
