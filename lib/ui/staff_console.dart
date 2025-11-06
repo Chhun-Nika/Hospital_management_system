@@ -336,245 +336,264 @@ abstract class StaffConsole<T extends Staff> {
   }
 
   void createStaff() {
-  clearScreen();
-  print("-- Create new ${T == Nurse ? 'Nurse' : 'Doctor'} --\n");
-  warning("All information must be filled in order to continue.\n");
+    clearScreen();
+    print("-- Create new ${T == Nurse ? 'Nurse' : 'Doctor'} --\n");
+    warning("All information must be filled in order to continue.\n");
 
-  String name;
-  Gender gender;
-  String phoneNumber;
-  String email;
-  // make this empty string since unless the type is doctor then the specialization will be set
-  String specialization = '';
+    String name;
+    Gender gender;
+    String phoneNumber;
+    String email;
+    // make this empty string since unless the type is doctor then the specialization will be set
+    String specialization = '';
 
-  while (true) {
-    stdout.write('- Name: ');
-    final input = stdin.readLineSync() ?? '';
-    if (input.trim().isEmpty) {
-      warning("** Name cannot be empty. **\n");
-      continue;
-    }
-    name = input;
-    break;
-  }
-
-  while (true) {
-    stdout.write('- Gender (female, male, other): ');
-    final input = stdin.readLineSync() ?? '';
-    if (input.trim().isEmpty) {
-      warning("** Input cannot be empty. **\n");
-      continue;
-    }
-    switch (input.toLowerCase()) {
-      case 'female':
-        gender = Gender.female;
-        break;
-      case 'male':
-        gender = Gender.male;
-        break;
-      case 'other':
-        gender = Gender.other;
-        break;
-      default:
-        warning("** Invalid input. Try again. **\n");
-        continue;
-    }
-    break;
-  }
-
-  while (true) {
-    stdout.write('- Phone Number: ');
-    final input = stdin.readLineSync() ?? '';
-    if (input.trim().isEmpty) {
-      warning("** Input cannot be empty. **\n");
-      continue;
-    }
-    if (input.length < 9) {
-      warning("** Invalid phone number format. **\n");
-      continue;
-    }
-    phoneNumber = input;
-    break;
-  }
-
-  while (true) {
-    stdout.write('- Email: ');
-    final input = stdin.readLineSync() ?? '';
-    if (input.trim().isEmpty) {
-      warning("** Input cannot be empty. **\n");
-      continue;
-    }
-    if (!input.contains('@') || !input.contains('.')) {
-      warning("** Invalid email format. **\n");
-      continue;
-    }
-    email = input;
-    break;
-  }
-
-  if (T == Doctor) {
     while (true) {
-      stdout.write('- Specialization: ');
+      stdout.write('- Name: ');
+      final input = stdin.readLineSync() ?? '';
+      if (input.trim().isEmpty) {
+        warning("** Name cannot be empty. **\n");
+        continue;
+      }
+      name = input;
+      break;
+    }
+
+    while (true) {
+      stdout.write('- Gender (female, male, other): ');
       final input = stdin.readLineSync() ?? '';
       if (input.trim().isEmpty) {
         warning("** Input cannot be empty. **\n");
         continue;
       }
-      specialization = input;
+      switch (input.toLowerCase()) {
+        case 'female':
+          gender = Gender.female;
+          break;
+        case 'male':
+          gender = Gender.male;
+          break;
+        case 'other':
+          gender = Gender.other;
+          break;
+        default:
+          warning("** Invalid input. Try again. **\n");
+          continue;
+      }
       break;
     }
-  }
 
-  Map<DayOfWeek, List<TimeSlot>> workingSchedule = {};
-
-  while (true) {
-    // print("\n-- Working Schedule --");
-    // for (var day in DayOfWeek.values) {
-    //   print("  ${day.index + 1}. ${day.name}");
-    // }
-
-    // DayOfWeek? selectedDay;
-    // while (selectedDay == null) {
-    //   stdout.write('\nEnter number: ');
-    //   final input = stdin.readLineSync() ?? '';
-    //   final number = int.tryParse(input);
-    //   if (number == null || number < 1 || number > DayOfWeek.values.length) {
-    //     warning("** Invalid input. Try again. **\n");
-    //   } else {
-    //     selectedDay = DayOfWeek.values[number - 1];
-    //   }
-    // }
-
-    // stdout.write('- Enter start time (HH:mm): ');
-    // final startInput = stdin.readLineSync() ?? '';
-    // final startTime = parseTimeOfDay(startInput);
-
-    // stdout.write('- Enter end time (HH:mm): ');
-    // final endInput = stdin.readLineSync() ?? '';
-    // final endTime = parseTimeOfDay(endInput);
-
-    // if (startTime == null || endTime == null) {
-    //   warning("** Invalid time format. **\n");
-    //   continue;
-    // }
-
-    // if (endTime.isBefore(startTime)) {
-    //   warning("** End time must be after start time. **\n");
-    //   continue;
-    // }
-    print("Select day of the week: \n");
-    for (var day in DayOfWeek.values) {
-      print("  ${day.index + 1}. ${day.name}");
-    }
-
-    DayOfWeek? selectedDay;
-
-    while (selectedDay == null) {
-      stdout.write('\nEnter number: ');
-      String input = stdin.readLineSync() ?? '';
-      int? parseInput = int.tryParse(input);
-      if (parseInput == null ||
-          parseInput < 1 ||
-          parseInput > DayOfWeek.values.length) {
-        print("\n** Invalid input. Try again. **\n");
-      } else {
-        selectedDay = DayOfWeek.values[parseInput - 1];
-      }
-    }
-    TimeOfDay? startTime;
-    TimeOfDay? endTime;
-    print("\nInput shift startTime and endTime");
-    while (startTime == null) {
-      stdout.write('- Enter start time (HH:MM): ');
-      String startInput = stdin.readLineSync() ?? '';
-      startTime = parseTimeOfDay(startInput);
-      if (startTime == null) {
-        warning("\n** Invalid time format. Use HH:mm format. **\n");
-      }
-    }
-
-    while (endTime == null) {
-      stdout.write('- Enter end time (HH:mm): ');
-      String endInput = stdin.readLineSync() ?? '';
-      endTime = parseTimeOfDay(endInput);
-      if (endTime == null) {
-        warning("\n** Invalid time format. Use HH:mm format. **\n");
-      } else if (endTime.isBefore(startTime)) {
-        warning("** End time must be after start time. **");
-        endTime = null;
-      }
-    }
-
-    if (!workingSchedule.containsKey(selectedDay)) {
-      workingSchedule[selectedDay] = [];
-    }
-    workingSchedule[selectedDay]!.add(TimeSlot(startTime: startTime, endTime: endTime));
-
-    // Ask if they want to add more schedules
     while (true) {
-      stdout.write("\nAdd more working schedule? (y/n): ");
-      final choice = stdin.readLineSync()?.trim().toLowerCase() ?? '';
-
-      if (choice.isEmpty) {
+      stdout.write('- Phone Number: ');
+      final input = stdin.readLineSync() ?? '';
+      if (input.trim().isEmpty) {
         warning("** Input cannot be empty. **\n");
         continue;
-      } else if (choice == 'y') {
-        break;
-      } else if (choice == 'n') {
-        if (T == Doctor) {
-          final newDoctor = Doctor(
-            name: name,
-            gender: gender,
-            phoneNumber: phoneNumber,
-            email: email,
-            specialization: specialization,
-            workingSchedule: workingSchedule,
-          );
-          hospital.addDoctor(newDoctor);
-          success("\n** Doctor added successfully **\n");
-        } else if (T == Nurse) {
-          final eligibleDoctors = hospital.getEligibleDoctorsForNurse(workingSchedule);
-          if (eligibleDoctors.isEmpty) {
-            warning("\n** No doctors available matching nurse's schedule. **\n");
-            return;
-          }
+      }
+      if (input.length < 9) {
+        warning("** Invalid phone number format. **\n");
+        continue;
+      }
+      phoneNumber = input;
+      break;
+    }
 
-          print("\nSelect a doctor for this nurse:");
-          for (int i = 0; i < eligibleDoctors.length; i++) {
-            print("  ${i + 1}. ${eligibleDoctors[i].name}");
-          }
+    while (true) {
+      stdout.write('- Email: ');
+      final input = stdin.readLineSync() ?? '';
+      if (input.trim().isEmpty) {
+        warning("** Input cannot be empty. **\n");
+        continue;
+      }
+      if (!input.contains('@') || !input.contains('.')) {
+        warning("** Invalid email format. **\n");
+        continue;
+      }
+      email = input;
+      break;
+    }
 
-          int? selectedDoctorIndex;
-          while (selectedDoctorIndex == null) {
-            stdout.write("\nEnter doctor number: ");
-            final input = stdin.readLineSync() ?? '';
-            final index = int.tryParse(input);
-            if (index == null ||
-                index < 1 ||
-                index > eligibleDoctors.length) {
-              warning("** Invalid input. Try again. **\n");
-              continue;
-            }
-            selectedDoctorIndex = index - 1;
-          }
-
-          final selectedDoctor = eligibleDoctors[selectedDoctorIndex];
-          final newNurse = Nurse(
-            name: name,
-            gender: gender,
-            phoneNumber: phoneNumber,
-            email: email,
-            doctorId: selectedDoctor.staffId,
-            workingSchedule: workingSchedule,
-          );
-          hospital.addNurse(newNurse);
-          success("\n** Nurse added successfully and linked to ${selectedDoctor.name}. **\n");
+    if (T == Doctor) {
+      while (true) {
+        stdout.write('- Specialization: ');
+        final input = stdin.readLineSync() ?? '';
+        if (input.trim().isEmpty) {
+          warning("** Input cannot be empty. **\n");
+          continue;
         }
-        return;
-      } else {
-        warning("** Invalid choice. Input 'y' or 'n'. **\n");
+        specialization = input;
+        break;
+      }
+    }
+
+    Map<DayOfWeek, List<TimeSlot>> workingSchedule = {};
+
+    while (true) {
+      // print("\n-- Working Schedule --");
+      // for (var day in DayOfWeek.values) {
+      //   print("  ${day.index + 1}. ${day.name}");
+      // }
+
+      // DayOfWeek? selectedDay;
+      // while (selectedDay == null) {
+      //   stdout.write('\nEnter number: ');
+      //   final input = stdin.readLineSync() ?? '';
+      //   final number = int.tryParse(input);
+      //   if (number == null || number < 1 || number > DayOfWeek.values.length) {
+      //     warning("** Invalid input. Try again. **\n");
+      //   } else {
+      //     selectedDay = DayOfWeek.values[number - 1];
+      //   }
+      // }
+
+      // stdout.write('- Enter start time (HH:mm): ');
+      // final startInput = stdin.readLineSync() ?? '';
+      // final startTime = parseTimeOfDay(startInput);
+
+      // stdout.write('- Enter end time (HH:mm): ');
+      // final endInput = stdin.readLineSync() ?? '';
+      // final endTime = parseTimeOfDay(endInput);
+
+      // if (startTime == null || endTime == null) {
+      //   warning("** Invalid time format. **\n");
+      //   continue;
+      // }
+
+      // if (endTime.isBefore(startTime)) {
+      //   warning("** End time must be after start time. **\n");
+      //   continue;
+      // }
+      print("Select day of the week: \n");
+      for (var day in DayOfWeek.values) {
+        print("  ${day.index + 1}. ${day.name}");
+      }
+
+      DayOfWeek? selectedDay;
+
+      while (selectedDay == null) {
+        stdout.write('\nEnter number: ');
+        String input = stdin.readLineSync() ?? '';
+        int? parseInput = int.tryParse(input);
+        if (parseInput == null ||
+            parseInput < 1 ||
+            parseInput > DayOfWeek.values.length) {
+          print("\n** Invalid input. Try again. **\n");
+        } else {
+          selectedDay = DayOfWeek.values[parseInput - 1];
+        }
+      }
+      TimeOfDay? startTime;
+      TimeOfDay? endTime;
+      print("\nInput shift startTime and endTime");
+      while (startTime == null) {
+        stdout.write('- Enter start time (HH:MM): ');
+        String startInput = stdin.readLineSync() ?? '';
+        startTime = parseTimeOfDay(startInput);
+        if (startTime == null) {
+          warning("\n** Invalid time format. Use HH:mm format. **\n");
+        }
+      }
+
+      while (endTime == null) {
+        stdout.write('- Enter end time (HH:mm): ');
+        String endInput = stdin.readLineSync() ?? '';
+        endTime = parseTimeOfDay(endInput);
+        if (endTime == null) {
+          warning("\n** Invalid time format. Use HH:mm format. **\n");
+        } else if (endTime.isBefore(startTime)) {
+          warning("** End time must be after start time. **");
+          endTime = null;
+        }
+      }
+
+      if (!workingSchedule.containsKey(selectedDay)) {
+        workingSchedule[selectedDay] = [];
+      }
+      workingSchedule[selectedDay]!.add(
+        TimeSlot(startTime: startTime, endTime: endTime),
+      );
+
+      // Ask if they want to add more schedules
+      while (true) {
+        stdout.write("\nAdd more working schedule? (y/n): ");
+        final choice = stdin.readLineSync()?.trim().toLowerCase() ?? '';
+
+        if (choice.isEmpty) {
+          warning("** Input cannot be empty. **\n");
+          continue;
+        } else if (choice == 'y') {
+          break;
+        } else if (choice == 'n') {
+          if (T == Doctor) {
+            final newDoctor = Doctor(
+              name: name,
+              gender: gender,
+              phoneNumber: phoneNumber,
+              email: email,
+              specialization: specialization,
+              workingSchedule: workingSchedule,
+            );
+            hospital.addDoctor(newDoctor);
+            success("\n** Doctor added successfully **\n");
+          } else if (T == Nurse) {
+            final eligibleDoctors = hospital.getEligibleDoctorsForNurse(
+              workingSchedule,
+            );
+
+            String? assignedDoctorId;
+            if (eligibleDoctors.isEmpty) {
+              warning(
+                "\n** No doctors available matching nurse's schedule. Nurse will be created without assigned doctor. **\n",
+              );
+            } else {
+              print("\nSelect a doctor for this nurse:");
+              for (int i = 0; i < eligibleDoctors.length; i++) {
+                print("  ${i + 1}. ${eligibleDoctors[i].name}");
+              }
+
+              int? selectedDoctorIndex;
+              while (selectedDoctorIndex == null) {
+                stdout.write(
+                  "\nEnter doctor number (or 0 to skip assignment): ",
+                );
+                final input = stdin.readLineSync() ?? '';
+                final index = int.tryParse(input);
+                if (index == null ||
+                    index < 0 ||
+                    index > eligibleDoctors.length) {
+                  warning("** Invalid input. Try again. **\n");
+                  continue;
+                }
+                if (index == 0) break; // skip assignment
+                selectedDoctorIndex = index - 1;
+                assignedDoctorId = eligibleDoctors[selectedDoctorIndex].staffId;
+              }
+            }
+
+            final newNurse = Nurse(
+              name: name,
+              gender: gender,
+              phoneNumber: phoneNumber,
+              email: email,
+              doctorId: assignedDoctorId,
+              workingSchedule: workingSchedule,
+            );
+
+            hospital.addNurse(newNurse);
+            if (assignedDoctorId != null) {
+              success(
+                "\n** Nurse added successfully and linked to ${hospital.getDoctorName(assignedDoctorId)}. **\n",
+              );
+            } else {
+              success(
+                "\n** Nurse added successfully without assigned doctor. **\n",
+              );
+            }
+          }
+          return;
+        } else {
+          warning("** Invalid choice. Input 'y' or 'n'. **\n");
+        }
       }
     }
   }
-}
 }
