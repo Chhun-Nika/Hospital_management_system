@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
+import 'package:hospital_management_system/domain/nurse.dart';
 import 'package:hospital_management_system/domain/staff.dart';
+import 'package:hospital_management_system/domain/time_of_day.dart';
 import 'package:hospital_management_system/domain/time_slot.dart';
 import 'package:hospital_management_system/main.dart';
 
@@ -24,6 +27,7 @@ abstract class StaffConsole<T extends Staff> {
 
   // update Name
   void updateName(MapEntry<String, T> selectedStaff) {
+    clearScreen();
     print("\n-- Update Name --\n");
     print("** Current name: ${selectedStaff.value.name}");
 
@@ -32,66 +36,62 @@ abstract class StaffConsole<T extends Staff> {
       String input = stdin.readLineSync() ?? '';
 
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input == selectedStaff.value.name) {
-          print("\n** New input name is the same as the current name. **\n");
-        } else {
-          selectedStaff.value.name = input;
-          print('\n** Name is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      String? message = selectedStaff.value.updateName(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Name is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   // update gender
   void updateGender(MapEntry<String, T> selectedStaff) {
+    clearScreen();
     print("\n-- Update Gender --\n");
     print("** Current gender: ${selectedStaff.value.gender.name}");
     // display gender
-    print("Available Genders:");
-    print("  - Female");
-    print("  - Male");
-    print("  - Other");
 
     do {
-      stdout.write('\nEnter new gender (can be lower case): ');
+      stdout.write('\nEnter new gender (male, female, other): ');
       String input = stdin.readLineSync() ?? '';
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input.toLowerCase() == selectedStaff.value.gender.name) {
-          print(
-            "\n** New input gender is the same as the current gender. **\n",
-          );
-        } else {
-          late Gender newGender;
-          switch (input.toLowerCase()) {
-            case 'female':
-              newGender = Gender.female;
-              break;
-            case 'male':
-              newGender = Gender.male;
-              break;
-            case 'other':
-              newGender = Gender.other;
-              break;
-            default:
-              print('Invalid input.');
-              continue;
-          }
-          selectedStaff.value.gender = newGender;
-          print('\n** Gender is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      Gender? newGender;
+      switch (input.toLowerCase()) {
+        case 'female':
+          newGender = Gender.female;
+          break;
+        case 'male':
+          newGender = Gender.male;
+          break;
+        case 'other':
+          newGender = Gender.other;
+          break;
+        default:
+          warning('Invalid input. Try again');
+          continue;
+      }
+      String? message = selectedStaff.value.updateGender(newGender);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Gender is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   void updateEmail(MapEntry<String, T> selectedStaff) {
+    clearScreen();
     print("\n-- Update Email --\n");
     print("** Current Email: ${selectedStaff.value.email}");
 
@@ -100,26 +100,23 @@ abstract class StaffConsole<T extends Staff> {
       String input = stdin.readLineSync() ?? '';
 
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (!input.contains('@') || !input.contains('.')) {
-          print("\n** Email must contains these symbols: '@' and '.' **\n");
-          continue;
-        } else if (input == selectedStaff.value.email) {
-          print(
-            "\n** New input Specialization is the same as the current specialization. **\n",
-          );
-        } else {
-          selectedStaff.value.email = input;
-          print('\n** email is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+
+      String? message = selectedStaff.value.updateEmail(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Email is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   void updatePhoneNumber(MapEntry<String, T> selectedStaff) {
+    clearScreen();
     print("\n-- Update Phone Number --\n");
     print("** Current Email: ${selectedStaff.value.phoneNumber}");
 
@@ -128,80 +125,456 @@ abstract class StaffConsole<T extends Staff> {
       String input = stdin.readLineSync() ?? '';
 
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input.length < 9) {
-          print("\n** The length of phone number must be at least 9 **\n");
-          continue;
-        } else if (input == selectedStaff.value.phoneNumber) {
-          print(
-            "\n** New input Phone number is the same as the current Phone number. **\n",
-          );
-        } else {
-          selectedStaff.value.phoneNumber = input;
-          print('\n** Phone number is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      String? message = selectedStaff.value.updatePhoneNumber(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Phone number is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   void updateWorkingSchedule(MapEntry<String, T> selectedStaff) {
-    print("\n-- Update Working Schedule --\n");
-    print("** Current Working Schedule: \n");
     final List<MapEntry<DayOfWeek, List<TimeSlot>>> workingSchedule =
         selectedStaff.value.getWorkingScheduleEntries();
-    int counter = 1;
-    for (var entry in workingSchedule) {
-      final day = entry.key;
-      final slots = entry.value;
-      for (var slot in slots) {
-        print("$counter. ${day.name}: ${slot.startTime} - ${slot.endTime}");
-        counter++;
-      }
-    }
-    print("-------------------------------------------");
     bool isUpdate = true;
 
     do {
+      print("\n-- Update Working Schedule --\n");
       print("\nOptions: ");
       print('  1. Add new shift');
       print('  2. Delete shift');
-      print('  0. Exit select option mode');
+      print('  0. Exit update working schedule mode');
 
       stdout.write('\nEnter your choice: ');
       String input = stdin.readLineSync() ?? '';
       switch (input.trim()) {
         case '1':
-          inputAddShift(selectedStaff);
+          inputAddShift(selectedStaff, workingSchedule);
+          clearScreen();
+          break;
+        case '2':
+          inputDeleteShift(selectedStaff, workingSchedule);
+          clearScreen();
           break;
         case '0':
           isUpdate = false;
         default:
+          warning("\n** Invalid input. Try again. **");
+          pressEnterToContinue();
       }
     } while (isUpdate);
 
     // pressEnterToContinue();
   }
 
-  void inputAddShift(MapEntry<String, T> selectedStaff) {
+  void inputAddShift(
+    MapEntry<String, T> selectedStaff,
+    List<MapEntry<DayOfWeek, List<TimeSlot>>> workingSchedule,
+  ) {
     clearScreen();
-    print("-- Add new shift --\n");
-    print("Select day of the week: ");
+    print("** Current Working Schedule: ");
+
+    int counter = 1;
+    for (var entry in workingSchedule) {
+      final day = entry.key;
+      final slots = entry.value;
+      print("\n${day.name}: ");
+      for (var slot in slots) {
+        print(
+          "  $counter. ${slot.startTime.format()} - ${slot.endTime.format()}",
+        );
+        counter++;
+      }
+    }
+    print("\n-- Add new shift --\n");
+    print("Select day of the week: \n");
     for (var day in DayOfWeek.values) {
       print("  ${day.index + 1}. ${day.name}");
     }
 
-    do {
-      stdout.write('\nEnter number:');
+    DayOfWeek? selectedDay;
+
+    while (selectedDay == null) {
+      stdout.write('\nEnter number: ');
       String input = stdin.readLineSync() ?? '';
       int? parseInput = int.tryParse(input);
       if (parseInput == null ||
           parseInput < 1 ||
           parseInput > DayOfWeek.values.length) {
-            print("\n** Invalid input. **\n");
-          }
-    } while (true);
+        print("\n** Invalid input. Try again. **\n");
+      } else {
+        selectedDay = DayOfWeek.values[parseInput - 1];
+      }
+    }
+    TimeOfDay? startTime;
+    TimeOfDay? endTime;
+    print("\nInput shift startTime and endTime");
+    while (startTime == null) {
+      stdout.write('- Enter start time (HH:MM): ');
+      String startInput = stdin.readLineSync() ?? '';
+      startTime = parseTimeOfDay(startInput);
+      if (startTime == null) {
+        warning("\n** Invalid time format. Use HH:mm format. **\n");
+      }
+    }
+
+    while (endTime == null) {
+      stdout.write('- Enter end time (HH:mm): ');
+      String endInput = stdin.readLineSync() ?? '';
+      endTime = parseTimeOfDay(endInput);
+      if (endTime == null) {
+        warning("\n** Invalid time format. Use HH:mm format. **\n");
+      } else if (endTime.isBefore(startTime)) {
+        warning("** End time must be after start time. **");
+        endTime = null;
+      }
+    }
+
+    // adding the input into working schedule
+    bool added = selectedStaff.value.addShift(
+      selectedDay,
+      TimeSlot(startTime: startTime, endTime: endTime),
+    );
+    if (added) {
+      success("\n** Shift added successfully. **\n");
+    } else {
+      warning("\n** Error adding shift: Overlapping shift detected. **\n");
+    }
+
+    pressEnterToContinue();
   }
+
+  void inputDeleteShift(
+    MapEntry<String, T> selectedStaff,
+    List<MapEntry<DayOfWeek, List<TimeSlot>>> workingSchedule,
+  ) {
+    clearScreen();
+    print("-- Delete shift --\n");
+    print("** Current working schedule **");
+    final List<MapEntry<DayOfWeek, TimeSlot>> allShifts = [];
+    int counter = 1;
+    for (var entry in workingSchedule) {
+      final day = entry.key;
+      final slots = entry.value;
+      print("\n${day.name}: ");
+      for (var slot in slots) {
+        print(
+          "  $counter. ${slot.startTime.format()} - ${slot.endTime.format()}",
+        );
+        allShifts.add(MapEntry(day, slot));
+        counter++;
+      }
+    }
+    print("-------------------------------------------");
+    print("\nSelect a shift to be deleted\n");
+
+    int seletedIndex;
+    while (true) {
+      stdout.write('Enter shift number to delete: ');
+      String input = stdin.readLineSync() ?? '';
+      int? parseInput = int.tryParse(input);
+      if (parseInput == null ||
+          parseInput < 1 ||
+          parseInput > allShifts.length) {
+        warning("\n** Invalid input. Try again. **\n");
+        continue;
+      }
+
+      seletedIndex = parseInput;
+      break;
+    }
+
+    final shiftToDelete = allShifts[seletedIndex - 1];
+    final day = shiftToDelete.key;
+    final slot = shiftToDelete.value;
+
+    String? confirm;
+    while (true) {
+      stdout.write(
+        "Delete shift on ${day.name.toLowerCase()} "
+        "(${slot.startTime.format()} - ${slot.endTime.format()})? (y/n): ",
+      );
+      confirm = stdin.readLineSync()?.trim().toLowerCase();
+
+      // if the input is valid, exit the loop
+      if (confirm == 'y' || confirm == 'n') {
+        break;
+      }
+
+      warning("** Invalid input. Please enter 'y' or 'n'. **");
+    }
+    if (confirm == 'n') {
+      warning("Cancelled.");
+      pressEnterToContinue();
+      return;
+    }
+
+    selectedStaff.value.deleteShift(day, slot);
+    success("\n** Shift deleted successfully. **\n");
+    pressEnterToContinue();
+  }
+
+  TimeOfDay? parseTimeOfDay(String input) {
+    try {
+      final parts = input.split(':');
+      if (parts.length != 2) return null;
+      final hour = int.parse(parts[0]);
+      final minute = int.parse(parts[1]);
+      // check the time constraints
+      if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+      // if it passed conditions, return the time as TimeOfDay
+      return TimeOfDay(hour: hour, minute: minute);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void createStaff() {
+  clearScreen();
+  print("-- Create new ${T == Nurse ? 'Nurse' : 'Doctor'} --\n");
+  warning("All information must be filled in order to continue.\n");
+
+  String name;
+  Gender gender;
+  String phoneNumber;
+  String email;
+  // make this empty string since unless the type is doctor then the specialization will be set
+  String specialization = '';
+
+  while (true) {
+    stdout.write('- Name: ');
+    final input = stdin.readLineSync() ?? '';
+    if (input.trim().isEmpty) {
+      warning("** Name cannot be empty. **\n");
+      continue;
+    }
+    name = input;
+    break;
+  }
+
+  while (true) {
+    stdout.write('- Gender (female, male, other): ');
+    final input = stdin.readLineSync() ?? '';
+    if (input.trim().isEmpty) {
+      warning("** Input cannot be empty. **\n");
+      continue;
+    }
+    switch (input.toLowerCase()) {
+      case 'female':
+        gender = Gender.female;
+        break;
+      case 'male':
+        gender = Gender.male;
+        break;
+      case 'other':
+        gender = Gender.other;
+        break;
+      default:
+        warning("** Invalid input. Try again. **\n");
+        continue;
+    }
+    break;
+  }
+
+  while (true) {
+    stdout.write('- Phone Number: ');
+    final input = stdin.readLineSync() ?? '';
+    if (input.trim().isEmpty) {
+      warning("** Input cannot be empty. **\n");
+      continue;
+    }
+    if (input.length < 9) {
+      warning("** Invalid phone number format. **\n");
+      continue;
+    }
+    phoneNumber = input;
+    break;
+  }
+
+  while (true) {
+    stdout.write('- Email: ');
+    final input = stdin.readLineSync() ?? '';
+    if (input.trim().isEmpty) {
+      warning("** Input cannot be empty. **\n");
+      continue;
+    }
+    if (!input.contains('@') || !input.contains('.')) {
+      warning("** Invalid email format. **\n");
+      continue;
+    }
+    email = input;
+    break;
+  }
+
+  if (T == Doctor) {
+    while (true) {
+      stdout.write('- Specialization: ');
+      final input = stdin.readLineSync() ?? '';
+      if (input.trim().isEmpty) {
+        warning("** Input cannot be empty. **\n");
+        continue;
+      }
+      specialization = input;
+      break;
+    }
+  }
+
+  Map<DayOfWeek, List<TimeSlot>> workingSchedule = {};
+
+  while (true) {
+    // print("\n-- Working Schedule --");
+    // for (var day in DayOfWeek.values) {
+    //   print("  ${day.index + 1}. ${day.name}");
+    // }
+
+    // DayOfWeek? selectedDay;
+    // while (selectedDay == null) {
+    //   stdout.write('\nEnter number: ');
+    //   final input = stdin.readLineSync() ?? '';
+    //   final number = int.tryParse(input);
+    //   if (number == null || number < 1 || number > DayOfWeek.values.length) {
+    //     warning("** Invalid input. Try again. **\n");
+    //   } else {
+    //     selectedDay = DayOfWeek.values[number - 1];
+    //   }
+    // }
+
+    // stdout.write('- Enter start time (HH:mm): ');
+    // final startInput = stdin.readLineSync() ?? '';
+    // final startTime = parseTimeOfDay(startInput);
+
+    // stdout.write('- Enter end time (HH:mm): ');
+    // final endInput = stdin.readLineSync() ?? '';
+    // final endTime = parseTimeOfDay(endInput);
+
+    // if (startTime == null || endTime == null) {
+    //   warning("** Invalid time format. **\n");
+    //   continue;
+    // }
+
+    // if (endTime.isBefore(startTime)) {
+    //   warning("** End time must be after start time. **\n");
+    //   continue;
+    // }
+    print("Select day of the week: \n");
+    for (var day in DayOfWeek.values) {
+      print("  ${day.index + 1}. ${day.name}");
+    }
+
+    DayOfWeek? selectedDay;
+
+    while (selectedDay == null) {
+      stdout.write('\nEnter number: ');
+      String input = stdin.readLineSync() ?? '';
+      int? parseInput = int.tryParse(input);
+      if (parseInput == null ||
+          parseInput < 1 ||
+          parseInput > DayOfWeek.values.length) {
+        print("\n** Invalid input. Try again. **\n");
+      } else {
+        selectedDay = DayOfWeek.values[parseInput - 1];
+      }
+    }
+    TimeOfDay? startTime;
+    TimeOfDay? endTime;
+    print("\nInput shift startTime and endTime");
+    while (startTime == null) {
+      stdout.write('- Enter start time (HH:MM): ');
+      String startInput = stdin.readLineSync() ?? '';
+      startTime = parseTimeOfDay(startInput);
+      if (startTime == null) {
+        warning("\n** Invalid time format. Use HH:mm format. **\n");
+      }
+    }
+
+    while (endTime == null) {
+      stdout.write('- Enter end time (HH:mm): ');
+      String endInput = stdin.readLineSync() ?? '';
+      endTime = parseTimeOfDay(endInput);
+      if (endTime == null) {
+        warning("\n** Invalid time format. Use HH:mm format. **\n");
+      } else if (endTime.isBefore(startTime)) {
+        warning("** End time must be after start time. **");
+        endTime = null;
+      }
+    }
+
+    if (!workingSchedule.containsKey(selectedDay)) {
+      workingSchedule[selectedDay] = [];
+    }
+    workingSchedule[selectedDay]!.add(TimeSlot(startTime: startTime, endTime: endTime));
+
+    // Ask if they want to add more schedules
+    while (true) {
+      stdout.write("\nAdd more working schedule? (y/n): ");
+      final choice = stdin.readLineSync()?.trim().toLowerCase() ?? '';
+
+      if (choice.isEmpty) {
+        warning("** Input cannot be empty. **\n");
+        continue;
+      } else if (choice == 'y') {
+        break;
+      } else if (choice == 'n') {
+        if (T == Doctor) {
+          final newDoctor = Doctor(
+            name: name,
+            gender: gender,
+            phoneNumber: phoneNumber,
+            email: email,
+            specialization: specialization,
+            workingSchedule: workingSchedule,
+          );
+          hospital.addDoctor(newDoctor);
+          success("\n** Doctor added successfully **\n");
+        } else if (T == Nurse) {
+          final eligibleDoctors = hospital.getEligibleDoctorsForNurse(workingSchedule);
+          if (eligibleDoctors.isEmpty) {
+            warning("\n** No doctors available matching nurse's schedule. **\n");
+            return;
+          }
+
+          print("\nSelect a doctor for this nurse:");
+          for (int i = 0; i < eligibleDoctors.length; i++) {
+            print("  ${i + 1}. ${eligibleDoctors[i].name}");
+          }
+
+          int? selectedDoctorIndex;
+          while (selectedDoctorIndex == null) {
+            stdout.write("\nEnter doctor number: ");
+            final input = stdin.readLineSync() ?? '';
+            final index = int.tryParse(input);
+            if (index == null ||
+                index < 1 ||
+                index > eligibleDoctors.length) {
+              warning("** Invalid input. Try again. **\n");
+              continue;
+            }
+            selectedDoctorIndex = index - 1;
+          }
+
+          final selectedDoctor = eligibleDoctors[selectedDoctorIndex];
+          final newNurse = Nurse(
+            name: name,
+            gender: gender,
+            phoneNumber: phoneNumber,
+            email: email,
+            doctorId: selectedDoctor.staffId,
+            workingSchedule: workingSchedule,
+          );
+          hospital.addNurse(newNurse);
+          success("\n** Nurse added successfully and linked to ${selectedDoctor.name}. **\n");
+        }
+        return;
+      } else {
+        warning("** Invalid choice. Input 'y' or 'n'. **\n");
+      }
+    }
+  }
+}
 }

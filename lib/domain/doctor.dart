@@ -30,6 +30,10 @@ class Doctor extends Staff {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
 
+  List<String> get appointmentIds => _appointmentIds;
+
+  Map<DateTime, List<TimeSlot>> get bookedSlots => _bookedSlots;
+
   // Check if doctor works at that time
   //   bool isWorkingAt(DateTime appointmentDateTime, int durationMinutes) {
   //     final day = DayOfWeek.values[appointmentDateTime.weekday - 1];
@@ -173,30 +177,23 @@ class Doctor extends Staff {
   }
 
   // for updates
-  void updateInformation({
-    String? name,
-    Gender? gender,
-    String? email,
-    String? phoneNumber,
-    String? specialization,
-  }) {
-    if (name != null) this.name = name;
+  // void updateInformation({
+  //   String? name,
+  //   Gender? gender,
+  //   String? email,
+  //   String? phoneNumber,
+  //   String? specialization,
+  // }) {
+  //   if (name != null) this.name = name;
+  // }
+
+  
+
+  // update specialization
+  String? updateSpecialization (String newSpecialization) {
+    if(newSpecialization == _specialization) return "New specialization is the same as current specialization";
+    _specialization = newSpecialization;
+    return null;
   }
 
-  // format working schedule
-  String formatWorkingSchedule() {
-    final formatted = workingSchedule.entries
-        .map((entry) {
-          final day = entry.key.name;
-          final time = entry.value.map((t) => "${t.startTime.format()} - ${t.endTime.format()}");
-          return "$day : $time";
-        })
-        .join('\n');
-
-    return formatted;
-  }
-
-  set specialization(String value) {
-    _specialization = value;
-  }
 }

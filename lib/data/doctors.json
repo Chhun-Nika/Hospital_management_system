@@ -1,35 +1,69 @@
 [
+ {
+  "staffId": "d001",
+  "name": "nika",
+  "gender": "female",
+  "role": "Doctor",
+  "phoneNumber": "0123456789",
+  "email": "sokdara@hospital.com",
+  "specialization": "Cardiology",
+  "appointmentIds": [],
+  "workingSchedule": {
+   "monday": [
     {
-        "staffId": "d001",
-        "name": "Sok Dara",
-        "gender": "male",
-        "role": "Doctor",
-        "phoneNumber": "0123456789",
-        "email": "sokdara@hospital.com",
-        "specialization": "Cardiology",
-        "appointmentIds": ["apt-001", "apt-002"],
-        "workingSchedule": {
-            "monday": [{ "start": "08:00", "end": "16:00" }, {"start" : "17:00", "end": "20:00"}],
-            "wednesday": [{ "start": "08:00", "end": "16:00" }],
-            "friday": [{ "start": "08:00", "end": "12:00" }]
-        },
-        "bookedSlots": {
-            "2025-10-31": [{ "start": "09:00", "end": "11:00" }]
-        }
+     "start": "08:00",
+     "end": "16:00"
     },
     {
-        "staffId": "d002",
-        "name": "Chan Borey",
-        "gender": "male",
-        "role": "Doctor",
-        "phoneNumber": "011223344",
-        "email": "chanborey@hospital.com",
-        "specialization": "Dermatology",
-        "appointmentIds": ["apt-003"],
-        "workingSchedule": {
-            "tuesday": [{ "start": "08:00", "end": "16:00" }],
-            "thursday": [{ "start": "08:00", "end": "16:00" }]
-        },
-        "bookedSlots": {}
+     "start": "17:00",
+     "end": "20:00"
     }
+   ],
+   "wednesday": [
+    {
+     "start": "08:00",
+     "end": "16:00"
+    }
+   ],
+   "friday": [
+    {
+     "start": "08:00",
+     "end": "12:00"
+    }
+   ]
+  },
+  "bookedSlots": {
+   "2025-10-31": [
+    {
+     "start": "09:00",
+     "end": "11:00"
+    }
+   ]
+  }
+ },
+ {
+  "staffId": "d002",
+  "name": "Chan Borey",
+  "gender": "male",
+  "role": "Doctor",
+  "phoneNumber": "011223344",
+  "email": "chanborey@hospital.com",
+  "specialization": "Dermatology",
+  "appointmentIds": [],
+  "workingSchedule": {
+   "tuesday": [
+    {
+     "start": "08:00",
+     "end": "16:00"
+    }
+   ],
+   "thursday": [
+    {
+     "start": "08:00",
+     "end": "16:00"
+    }
+   ]
+  },
+  "bookedSlots": {}
+ }
 ]
