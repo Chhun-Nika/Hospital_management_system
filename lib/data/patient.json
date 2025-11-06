@@ -7,7 +7,6 @@
     "phoneNumber": "0971234567",
     "address": "Phnom Penh, Cambodia",
     "emergencyContact": "0972233445",
-    "status": "active",
     "appointmentIds": ["apt-001", "apt-007"]
   },
   {
@@ -18,7 +17,6 @@
     "phoneNumber": "096112233",
     "address": "Siem Reap, Cambodia",
     "emergencyContact": "0964455667",
-    "status": "active",
     "appointmentIds": ["apt-002"]
   },
   {
@@ -29,7 +27,6 @@
     "phoneNumber": "095667788",
     "address": "Battambang, Cambodia",
     "emergencyContact": "095998877",
-    "status": "active",
     "appointmentIds": ["apt-003"]
   },
   {
@@ -40,7 +37,6 @@
     "phoneNumber": "094223344",
     "address": "Kampong Cham, Cambodia",
     "emergencyContact": "094556677",
-    "status": "active",
     "appointmentIds": ["apt-004"]
   },
   {
@@ -51,7 +47,6 @@
     "phoneNumber": "011445566",
     "address": "Phnom Penh, Cambodia",
     "emergencyContact": "011998877",
-    "status": "active",
     "appointmentIds": ["apt-005"]
   },
   {
@@ -62,7 +57,6 @@
     "phoneNumber": "097556677",
     "address": "Takeo, Cambodia",
     "emergencyContact": "097665544",
-    "status": "active",
     "appointmentIds": ["apt-006"]
   },
   {
@@ -73,7 +67,6 @@
     "phoneNumber": "012334455",
     "address": "Siem Reap, Cambodia",
     "emergencyContact": "012667788",
-    "status": "active",
     "appointmentIds": ["apt-007"]
   },
   {
@@ -84,7 +77,6 @@
     "phoneNumber": "010998877",
     "address": "Kampong Thom, Cambodia",
     "emergencyContact": "010445566",
-    "status": "active",
     "appointmentIds": ["apt-008"]
   },
   {
@@ -95,7 +87,6 @@
     "phoneNumber": "011223344",
     "address": "Prey Veng, Cambodia",
     "emergencyContact": "011556677",
-    "status": "active",
     "appointmentIds": ["apt-009"]
   },
   {
@@ -106,7 +97,6 @@
     "phoneNumber": "013223344",
     "address": "Kampong Speu, Cambodia",
     "emergencyContact": "013667788",
-    "status": "active",
     "appointmentIds": ["apt-010"]
   }
 ]

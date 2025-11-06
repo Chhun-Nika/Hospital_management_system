@@ -6,11 +6,13 @@ import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
 import 'package:hospital_management_system/domain/patient.dart';
 import 'package:hospital_management_system/main.dart';
+import 'package:hospital_management_system/ui/appointment_management_console.dart';
 
 class PatientConsole {
   final Hospital hospital;
+  AppointmentManagementConsole? appointmentConsole;
 
-  PatientConsole({required this.hospital});
+  PatientConsole({required this.hospital, this.appointmentConsole});
 
   void startPatientConsole() {
     bool inSubmenu = true;
@@ -18,7 +20,8 @@ class PatientConsole {
       clearScreen();
       print('--- patient management ---\n');
       print('1. View all Patient');
-      print('2. Update Patient Informations');
+      print('2. Create New Patient');
+      print('3. Update Patient Informations');
       print('0. Exit ');
 
       String? userInput;
@@ -29,11 +32,20 @@ class PatientConsole {
         case '1':
           clearScreen();
           print("-- Patients --");
-          viewPatient();
+          viewPatientAndAppointment();
           pressEnterToContinue();
           break;
         case '2':
+          clearScreen();
+          print("-- Create New Patient --");
+          createPatientWithAppointment();
+          break;
+        case '3':
+          clearScreen();
+          print("-- Update Patient --");
           updatePatient();
+          pressEnterToContinue();
+          break;
         case '0':
           inSubmenu = false;
           break;
@@ -58,8 +70,6 @@ class PatientConsole {
       'EmergencyContact',
     ];
 
-    final List<MapEntry<String, dynamic>> patients = hospital.patients.entries
-        .toList();
     final List<List<dynamic>> rows = [];
     int number = 1;
     hospital.patients.forEach((id, pat) {
@@ -484,5 +494,109 @@ class PatientConsole {
         }
       }
     } while (true);
+  }
+
+  // AI-generated : fucntion warning message
+  void warning(String message) {
+    // ANSI escape code for yellow text
+    const yellow = '\x1B[33m';
+    const reset = '\x1B[0m';
+    print('\n$yellow WARNING: $message$reset');
+  }
+
+  void createPatientWithAppointment() {
+    warning("All information must be filled in order to create new Patient.\n");
+    String name;
+    Gender gender;
+    DateTime dateOfBirth;
+    String phoneNumber;
+    String address;
+    String emergencyContact;
+
+    while (true) {
+      stdout.write('- Name: ');
+      String inputName = stdin.readLineSync() ?? '';
+      if (inputName.trim().isEmpty) {
+        warning("\n** Name Cannot be Empty **\n");
+      } else {
+        name = inputName;
+        break;
+      }
+    }
+
+    while (true) {
+      stdout.write('- Gender (male or female): ');
+      String inputGender = stdin.readLineSync() ?? '';
+      if (inputGender == 'male') {
+        gender = Gender.male;
+        break;
+      } else if (inputGender == 'female') {
+        gender = Gender.female;
+        break;
+      } else {
+        warning("\n** Please enter either 'male' or 'female' **\n");
+      }
+    }
+
+    while (true) {
+      stdout.write('- Date Of Birth (yyyy-mm-dd): ');
+      String inputDob = stdin.readLineSync() ?? '';
+      try {
+        dateOfBirth = DateTime.parse(inputDob);
+        break;
+      } catch (e) {
+        print("Invalid date format, try again.");
+      }
+    }
+
+    while (true) {
+      stdout.write('- Phone Number: ');
+      String inputPhone = stdin.readLineSync() ?? '';
+      if (inputPhone.trim().isEmpty) {
+        warning("\n** Name Cannot be Empty **\n");
+      } else {
+        phoneNumber = inputPhone;
+        break;
+      }
+    }
+
+    while (true) {
+      stdout.write('- Address: ');
+      String inputAddress = stdin.readLineSync() ?? '';
+      if (inputAddress.trim().isEmpty) {
+        warning("\n** Name Cannot be Empty **\n");
+      } else {
+        address = inputAddress;
+        break;
+      }
+    }
+
+    while (true) {
+      stdout.write('- Emergency Contact: ');
+      String inputEmer = stdin.readLineSync() ?? '';
+      if (inputEmer.trim().isEmpty) {
+        warning("\n** Name Cannot be Empty **\n");
+      } else {
+        emergencyContact = inputEmer;
+        break;
+      }
+    }
+
+    Patient newPatient = Patient(
+      fullName: name,
+      gender: gender,
+      dateOfBirth: dateOfBirth,
+      phoneNumber: phoneNumber,
+      address: address,
+      emergencyContact: emergencyContact,
+      appointmentIds: [],
+    );
+    hospital.addPatient(newPatient);
+
+    clearScreen();
+    // create their appointment
+    print("\n** Create ${newPatient.fullName}'s Appointment **\n");
+    appointmentConsole?.createAppointment(newPatient.patientId);
+  
   }
 }

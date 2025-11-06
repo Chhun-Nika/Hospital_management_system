@@ -28,7 +28,7 @@ class Hospital {
     _patients.addAll(patients);
   }
 
-  void addAppointment(Map<String, Appointment> appointments) {
+  void addAppointments(Map<String, Appointment> appointments) {
     _appointments.addAll(appointments);
   }
 
@@ -37,7 +37,16 @@ class Hospital {
     return _doctors.entries.toList();
   }
 
-   List<MapEntry<String, Patient>> getPatientEntries() {
+  List<MapEntry<String, Patient>> getPatientEntries() {
     return _patients.entries.toList();
+  }
+
+  // Single add methods
+  void addPatient(Patient patient) {
+    _patients[patient.patientId] = patient;
+  }
+
+  void addAppointment(Appointment appointment) {
+    _appointments[appointment.appointmentId] = appointment;
   }
 }

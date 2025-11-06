@@ -44,7 +44,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
 
   @override
   void viewStaff() {
-    clearScreen();
+    // clearScreen();
     if (hospital.doctors.isEmpty) {
       print("No Doctors.");
     }

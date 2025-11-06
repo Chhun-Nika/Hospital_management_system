@@ -11,7 +11,6 @@ class Patient {
   String phoneNumber;
   String address;
   String emergencyContact;
-  String _status;
   List<String> _appointmentIds;
 
   Patient({
@@ -23,7 +22,6 @@ class Patient {
     required String phoneNumber,
     required String address,
     required String emergencyContact,
-    required String status,
     required List<String> appointmentIds,
   }) : _patientId = patientId ?? uuid.v4(),
        fullName = fullName,
@@ -32,7 +30,6 @@ class Patient {
        phoneNumber = phoneNumber,
        address = address,
        emergencyContact = emergencyContact,
-       _status = status,
        _appointmentIds = appointmentIds;
 
   String get patientId => _patientId;
@@ -42,6 +39,5 @@ class Patient {
   // String get phoneNumber => phoneNumber;
   // String get address => address;
   // String get emergencyContact => emergencyContact;
-  String get status => _status;
   List<String> get appointmentIds => _appointmentIds;
 }
