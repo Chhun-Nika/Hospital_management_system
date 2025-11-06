@@ -39,6 +39,7 @@ class AppointmentRepository {
         reasons: app['reason'],
         dateTime: DateTime.parse(app['appointmentDateTime'] as String),
         appointmentStatus: appointmentStatus,
+        doctorNotes: app['doctorNotes'],
       );
     }
     return appointments;

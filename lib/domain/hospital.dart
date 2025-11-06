@@ -36,4 +36,8 @@ class Hospital {
   List<MapEntry<String, Doctor>> getDoctorEntries() {
     return _doctors.entries.toList();
   }
+
+   List<MapEntry<String, Patient>> getPatientEntries() {
+    return _patients.entries.toList();
+  }
 }
