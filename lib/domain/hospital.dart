@@ -1,8 +1,10 @@
 import 'dart:collection';
 import 'package:hospital_management_system/domain/appointment.dart';
 import 'package:hospital_management_system/domain/doctor.dart';
+import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/nurse.dart';
 import 'package:hospital_management_system/domain/patient.dart';
+import 'package:hospital_management_system/domain/time_slot.dart';
 
 class Hospital {
   final Map<String, Doctor> _doctors = {};
@@ -19,7 +21,7 @@ class Hospital {
       UnmodifiableMapView(_appointments);
   Map<String, Patient> get patients => UnmodifiableMapView(_patients);
 
-  // this function is use to add all doctors from json to current object
+  // these functions are use to add all doctors from json to current object
   void addDoctors(Map<String, Doctor> doctors) {
     _doctors.addAll(doctors);
   }
@@ -32,12 +34,67 @@ class Hospital {
     _appointments.addAll(appointments);
   }
 
+  void addNurses(Map<String, Nurse> nurses) {
+    _nurses.addAll(nurses);
+  }
+
+  // these functions are use to add single staff in creating staff mode
+  void addNurse(Nurse nurse) {
+    _nurses[nurse.staffId] = nurse;
+  }
+
+  void addDoctor(Doctor doctor) {
+    _doctors[doctor.staffId] = doctor;
+  }
+
   // for accessing and selecting each doctors via number instead of id
   List<MapEntry<String, Doctor>> getDoctorEntries() {
     return _doctors.entries.toList();
   }
 
-   List<MapEntry<String, Patient>> getPatientEntries() {
+  List<MapEntry<String, Patient>> getPatientEntries() {
     return _patients.entries.toList();
+  }
+
+  // AI helps not fully generated
+  List<Doctor> getEligibleDoctorsForNurse(
+    Map<DayOfWeek, List<TimeSlot>> nurseSchedule,
+  ) {
+    final avaibleDoctors = doctors.values.where((doctor) {
+      // go through nurse working schedule
+      return nurseSchedule.entries.every((entry) {
+        // if a nurse working slot that contains key same as any doctor slots
+        // it will return the list of slots else it returns empty slot
+        final doctorSlots = doctor.workingSchedule[entry.key] ?? [];
+        // this will be true unless all any doctor slots has startTime after the nurse and endTIme before nurse
+        return entry.value.every(
+          (nurseSlot) => doctorSlots.any(
+            (docSlot) =>
+                !nurseSlot.startTime.isBefore(
+                  docSlot.startTime,
+                ) && // nurse start >= doctor start
+                !nurseSlot.endTime.isAfter(docSlot.endTime),
+          ),
+        );
+      });
+    });
+    return avaibleDoctors.toList();
+  }
+
+  String getNursesForDoctorFormatted(String doctorId) {
+    final nursesForDoctor = _nurses.values
+        .where((nurse) => nurse.doctorId == doctorId)
+        // change nurse object to nurse.name for displaying
+        .map((nurse) => nurse.name)
+        .toList();
+
+    if (nursesForDoctor.isEmpty) return "No nurses assigned";
+
+    return nursesForDoctor.join('\n');
+  }
+
+  String getDoctorName (String doctorId) {
+    final String name = 'Dr. ${_doctors[doctorId]!.name}';
+    return name;
   }
 }

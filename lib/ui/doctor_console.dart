@@ -28,16 +28,19 @@ class DoctorConsole extends StaffConsole<Doctor> {
           pressToExit();
           break;
         case '2':
+          createStaff();
           pressEnterToContinue();
+          break;
         case '3':
           updateDoctor();
+          break;
         // pressEnterToContinue();
         case '0':
           inSubmenu = false;
           break;
         default:
-          print("Invalid choice. Try again.");
-        // pressEnterToContinue();
+          warning("Invalid choice. Try again.");
+          pressEnterToContinue();
       }
     } while (inSubmenu);
   }
@@ -57,6 +60,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
       'Email',
       'Phone Number',
       'Working Schedule',
+      'Assisted By'
     ];
     final List<List<dynamic>> rows = [];
     int number = 1;
@@ -72,6 +76,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
         doc.email,
         doc.phoneNumber,
         doc.formatWorkingSchedule(),
+        hospital.getNursesForDoctorFormatted(doc.staffId)
       ]);
       number++;
     });
@@ -80,7 +85,6 @@ class DoctorConsole extends StaffConsole<Doctor> {
     table.addAll(rows);
     print(table);
   }
-
 
   void updateDoctor() {
     // viewDoctors();
@@ -94,7 +98,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
       stdout.write('Enter your choice (q to exit): ');
       String userInput = stdin.readLineSync() ?? '';
       if (userInput.trim().isEmpty) {
-        print("\n** Input cannot be empty. **\n");
+        warning("\n** Input cannot be empty. **\n");
         // clearScreen();
       } else if (userInput.toLowerCase() == 'q') {
         clearScreen();
@@ -109,12 +113,16 @@ class DoctorConsole extends StaffConsole<Doctor> {
             clearScreen();
             doctorDetailDisplay(doctorList, parseInput);
           } else {
-            print(
+            warning(
               '\n** Please enter a valid input (refer to table No. for input range) **\n',
             );
+            pressEnterToContinue();
           }
         } catch (e) {
-          print('\n** Invalid input. Please enter a number or q to quit. **\n');
+          warning(
+            '\n** Invalid input. Please enter a number or q to quit. **\n',
+          );
+          pressEnterToContinue();
         }
       }
     } while (true);
@@ -128,9 +136,10 @@ class DoctorConsole extends StaffConsole<Doctor> {
 
     bool stillUpdate = true;
     String updateInput;
-    String nameFormat = 'Dr. ${selectedDoctor.value.name}';
+
     do {
       clearScreen();
+      String nameFormat = 'Dr. ${selectedDoctor.value.name}';
       print('Dr. ${selectedDoctor.value.name}\'s infromation');
       final headers = [
         'No.',
@@ -187,13 +196,14 @@ class DoctorConsole extends StaffConsole<Doctor> {
           stillUpdate = false;
           break;
         default:
-          print("Invalid choice. Try again.");
+          warning("Invalid choice. Try again.");
           pressEnterToContinue(text: "Press enter to input again.");
       }
     } while (stillUpdate);
   }
 
   void updateSpecialization(MapEntry<String, Doctor> selectedDoctor) {
+    clearScreen();
     print("\n-- Update Specialization --\n");
     print("** Current Specialization: ${selectedDoctor.value.specialization}");
 
@@ -202,17 +212,18 @@ class DoctorConsole extends StaffConsole<Doctor> {
       String input = stdin.readLineSync() ?? '';
 
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input == selectedDoctor.value.specialization) {
-          print("\n** New input Specialization is the same as the current specialization. **\n");
-        } else {
-          selectedDoctor.value.specialization = input;
-          print('\n** Specialization is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      String? message = selectedDoctor.value.updateSpecialization(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+
+      success('\n** Specialization is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 

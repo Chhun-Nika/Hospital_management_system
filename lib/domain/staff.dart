@@ -6,8 +6,8 @@ var uuid = Uuid();
 
 abstract class Staff {
   final String _staffId;
-  String name;
-  Gender gender;
+  String _name;
+  Gender _gender;
   Role _role;
   String _phoneNumber;
   String _email;
@@ -15,13 +15,15 @@ abstract class Staff {
 
   Staff({
     String? staffId,
-    required this.name,
-    required this.gender,
+    required String name,
+    required Gender gender,
     required Role role,
     required String phoneNumber,
     required String email,
     required this.workingSchedule,
   }) : _staffId = staffId ?? uuid.v4(),
+  _name = name,
+  _gender = gender,
        _role = role,
        _phoneNumber = _validatePhoneNumber(phoneNumber),
        _email = _validateEmail(email);
@@ -30,29 +32,11 @@ abstract class Staff {
   Role get role => _role;
   String get phoneNumber => _phoneNumber;
   String get email => _email;
+  String get name => _name;
+  Gender get gender => _gender;
 
-  set phoneNumber(String value) {
-    _phoneNumber = _validatePhoneNumber(value);
-  }
-
-  set email(String value) {
-    _email = _validateEmail(value);
-  }
-
-  static String _validateEmail(String value) {
-    if (!value.contains('@') || !value.contains('.')) {
-      throw Exception('Invalid email format: $value');
-    }
-    return value;
-  }
-
-  static String _validatePhoneNumber(String value) {
-    if (value.length < 9) {
-      throw Exception('Invalid phone number: $value');
-    }
-    return value;
-  }
-
+  // manage working schedule
+  // turning map to list for easy display and access index since mostly user select by number not input the string
   List<MapEntry<DayOfWeek, List<TimeSlot>>> getWorkingScheduleEntries() {
     return workingSchedule.entries.toList();
   }
@@ -106,7 +90,81 @@ abstract class Staff {
       return false;
     }
 
-    // To make this work, TimeSlot needs proper equality comparison
-    return workingSchedule[day]!.remove(slotToDelete);
+    final removed = workingSchedule[day]?.remove(slotToDelete) ?? false;
+    if (workingSchedule[day]?.isEmpty ?? false) {
+      workingSchedule.remove(day);
+    }
+
+    return removed;
   }
+
+  // update staff information
+
+  String? updateName(String newName) {
+    // if (newName.trim().isEmpty) return "Name cannot be empty.";
+    if (newName == _name) return "New name is the same as current name.";
+    _name = newName;
+    return null;
+  }
+
+  String? updateGender(Gender newGender) {
+    if (newGender == _gender) return "New gender is the same as current gender.";
+    _gender = newGender;
+    return null;
+  }
+
+  String? updateEmail(String newEmail) {
+    try {
+      newEmail = _validateEmail(newEmail);
+    } catch (e) {
+      return e.toString().replaceFirst('Exception: ', '');
+    }
+
+    if (newEmail == _email) return "New email is the same as current email.";
+    _email = newEmail;
+    return null;
+  }
+
+  String? updatePhoneNumber(String newNumber) {
+    try {
+      newNumber = _validatePhoneNumber(newNumber);
+    } catch (e) {
+      return e.toString().replaceFirst('Exception: ', '');
+    }
+
+    if (newNumber == _phoneNumber) return "New phone number is the same as current number.";
+    _phoneNumber = newNumber;
+    return null;
+  }
+
+  // validation 
+  static String _validateEmail(String value) {
+    if (!value.contains('@') || !value.contains('.')) {
+      throw Exception('Invalid email format: $value');
+    }
+    return value;
+  }
+
+  static String _validatePhoneNumber(String value) {
+    if (value.length < 9) {
+      throw Exception('Invalid phone number: $value');
+    }
+    return value;
+  }
+
+  String formatWorkingSchedule() {
+    final formatted = workingSchedule.entries
+        .map((entry) {
+          final day = entry.key.name;
+          final time = entry.value.map(
+            (t) => "${t.startTime.format()} - ${t.endTime.format()}",
+          );
+          return "$day : $time";
+        })
+        .join('\n');
+
+    return formatted;
+  }
+
+
 }
