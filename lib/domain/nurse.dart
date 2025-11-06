@@ -1,6 +1,5 @@
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/staff.dart';
-import 'package:hospital_management_system/domain/time_slot.dart';
 
 class Nurse extends Staff {
   String? _doctorId;

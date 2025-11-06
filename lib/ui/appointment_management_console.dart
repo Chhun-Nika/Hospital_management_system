@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cli_table/cli_table.dart';
 import 'package:hospital_management_system/domain/appointment.dart';
-import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
 import 'package:hospital_management_system/main.dart';

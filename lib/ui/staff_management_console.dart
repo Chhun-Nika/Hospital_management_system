@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:hospital_management_system/domain/hospital.dart';
 import 'package:hospital_management_system/main.dart';
