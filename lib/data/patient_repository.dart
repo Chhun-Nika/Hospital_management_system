@@ -40,7 +40,6 @@ class PatientRepository {
         phoneNumber: pat['phoneNumber'],
         address: pat['address'],
         emergencyContact: pat['emergencyContact'],
-        status: pat['status'],
         appointmentIds: appointmentIds,
       );
     }

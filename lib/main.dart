@@ -5,6 +5,7 @@ import 'package:hospital_management_system/data/hospital_repository.dart';
 import 'package:hospital_management_system/data/nurse_repository.dart';
 import 'package:hospital_management_system/data/patient_repository.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
+import 'package:hospital_management_system/ui/appointment_management_console.dart';
 import 'package:hospital_management_system/ui/patient_management_console.dart';
 import 'package:hospital_management_system/ui/staff_management_console.dart';
 
@@ -29,8 +30,13 @@ void main() {
     hospital: hospital,
   );
 
-  final PatientConsole patientConsole = PatientConsole(hospital: hospital);
+  final PatientConsole patientConsole = PatientConsole(hospital: hospital, appointmentConsole: null);
+  final AppointmentManagementConsole appointmentManagementConsole =
+      AppointmentManagementConsole(hospital: hospital, doctorConsole: null, patientConsole: null);
 
+  patientConsole.appointmentConsole = appointmentManagementConsole;
+  appointmentManagementConsole.doctorConsole = staffConsole.doctorConsole;
+  appointmentManagementConsole.patientConsole = patientConsole;
   do {
     clearScreen(); // Clear terminal at the start of each loop
     print("-- Welcome to Hospital Management System! --\n");
@@ -48,7 +54,8 @@ void main() {
         staffConsole.startStaffManagementConsole();
         break;
       case '2':
-        print('hello');
+        clearScreen();
+        appointmentManagementConsole.startAppointmentConsole();
         break;
       case '3':
         clearScreen();

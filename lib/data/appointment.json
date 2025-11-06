@@ -35,7 +35,7 @@
   {
     "appointmentId": "apt-004",
     "patientId": "p004",
-    "doctorId": "d003",
+    "doctorId": "d001",
     "receptionistId": "r001",
     "appointmentDateTime": "2025-11-04 09:00:00",
     "duration": 2,
@@ -46,7 +46,7 @@
   {
     "appointmentId": "apt-005",
     "patientId": "p005",
-    "doctorId": "d005",
+    "doctorId": "d002",
     "receptionistId": "r001",
     "appointmentDateTime": "2025-11-05 11:00:00",
     "duration": 1,
@@ -57,7 +57,7 @@
   {
     "appointmentId": "apt-006",
     "patientId": "p006",
-    "doctorId": "d005",
+    "doctorId": "d002",
     "receptionistId": "r001",
     "appointmentDateTime": "2025-11-06 14:30:00",
     "duration": 2,
@@ -68,7 +68,7 @@
   {
     "appointmentId": "apt-007",
     "patientId": "p007",
-    "doctorId": "d003",
+    "doctorId": "d001",
     "receptionistId": "r001",
     "appointmentDateTime": "2025-11-07 13:00:00",
     "duration": 1,
@@ -90,7 +90,7 @@
   {
     "appointmentId": "apt-009",
     "patientId": "p009",
-    "doctorId": "d004",
+    "doctorId": "d001",
     "receptionistId": "r001",
     "appointmentDateTime": "2025-11-09 09:30:00",
     "duration": 1,
@@ -101,7 +101,7 @@
   {
     "appointmentId": "apt-010",
     "patientId": "p010",
-    "doctorId": "d004",
+    "doctorId": "d002",
     "receptionistId": "r001",
     "appointmentDateTime": "2025-11-10 10:00:00",
     "duration": 2,

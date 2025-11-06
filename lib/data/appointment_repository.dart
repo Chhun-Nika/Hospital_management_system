@@ -34,7 +34,6 @@ class AppointmentRepository {
         id: appointmentId,
         patientId: patientId,
         doctorId: doctorId,
-        receptionistId: receptionistId,
         duration: app['duration'],
         reasons: app['reason'],
         dateTime: DateTime.parse(app['appointmentDateTime'] as String),
