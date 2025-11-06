@@ -22,12 +22,10 @@ class PatientRepository {
 
     for (var pat in data) {
       final patientId = pat['patientId'] as String;
-      final gender = Gender.values.firstWhere(
-        (g) => g.name.toLowerCase() == (pat['gender'] as String).toLowerCase(),
-        orElse: () => Gender.male,
-      );
+      final gender = Gender.values.firstWhere((g) => g.name == pat['gender']);
 
-      final appointmentIds = (pat['appointmentIds'] as List<dynamic>?)
+      final appointmentIds =
+          (pat['appointmentIds'] as List<dynamic>?)
               ?.map((id) => id as String)
               .toList() ??
           [];
@@ -44,5 +42,29 @@ class PatientRepository {
       );
     }
     return patients;
+  }
+
+  void writeAll(Map<String, Patient> patients) {
+    final file = File(filePath);
+    if (!file.existsSync()) {
+      throw FileSystemException('File not found: $filePath');
+    }
+
+    final data = patients.values.map((patient) {
+      return {
+        "patientId": patient.patientId,
+        "fullName": patient.fullName,
+        "gender": patient.gender.name,
+        "dateOfBirth": patient.dateOfBirth.toIso8601String(),
+        "phoneNumber": patient.phoneNumber,
+        "address": patient.address,
+        "emergencyContact": patient.emergencyContact,
+        "appointmentIds": patient.appointmentIds,
+      };
+    }).toList();
+    final encoder = JsonEncoder.withIndent(' ');
+    final jsonString = encoder.convert(data);
+
+    file.writeAsStringSync(jsonString);
   }
 }

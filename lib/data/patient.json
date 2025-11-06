@@ -2,7 +2,7 @@
   {
     "patientId": "p001",
     "fullName": "Ly Sopha",
-    "gender": "Female",
+    "gender": "female",
     "dateOfBirth": "1995-03-12T00:00:00Z",
     "phoneNumber": "0971234567",
     "address": "Phnom Penh, Cambodia",
@@ -12,7 +12,7 @@
   {
     "patientId": "p002",
     "fullName": "Khim Vannak",
-    "gender": "Male",
+    "gender": "male",
     "dateOfBirth": "1988-07-25T00:00:00Z",
     "phoneNumber": "096112233",
     "address": "Siem Reap, Cambodia",
@@ -22,7 +22,7 @@
   {
     "patientId": "p003",
     "fullName": "Chau Dara",
-    "gender": "Female",
+    "gender": "female",
     "dateOfBirth": "1979-11-19T00:00:00Z",
     "phoneNumber": "095667788",
     "address": "Battambang, Cambodia",
@@ -32,7 +32,7 @@
   {
     "patientId": "p004",
     "fullName": "Sok Kim",
-    "gender": "Male",
+    "gender": "male",
     "dateOfBirth": "1992-01-05T00:00:00Z",
     "phoneNumber": "094223344",
     "address": "Kampong Cham, Cambodia",
@@ -42,7 +42,7 @@
   {
     "patientId": "p005",
     "fullName": "Chum Lina",
-    "gender": "Female",
+    "gender": "female",
     "dateOfBirth": "1985-05-16T00:00:00Z",
     "phoneNumber": "011445566",
     "address": "Phnom Penh, Cambodia",
@@ -52,7 +52,7 @@
   {
     "patientId": "p006",
     "fullName": "Nary Phan",
-    "gender": "Female",
+    "gender": "female",
     "dateOfBirth": "1990-02-20T00:00:00Z",
     "phoneNumber": "097556677",
     "address": "Takeo, Cambodia",
@@ -62,7 +62,7 @@
   {
     "patientId": "p007",
     "fullName": "Sareth Kong",
-    "gender": "Male",
+    "gender": "male",
     "dateOfBirth": "1983-10-10T00:00:00Z",
     "phoneNumber": "012334455",
     "address": "Siem Reap, Cambodia",
@@ -72,7 +72,7 @@
   {
     "patientId": "p008",
     "fullName": "Vanna Meas",
-    "gender": "Female",
+    "gender": "female",
     "dateOfBirth": "1997-08-15T00:00:00Z",
     "phoneNumber": "010998877",
     "address": "Kampong Thom, Cambodia",
@@ -82,7 +82,7 @@
   {
     "patientId": "p009",
     "fullName": "Phal Srey",
-    "gender": "Female",
+    "gender": "female",
     "dateOfBirth": "1994-06-05T00:00:00Z",
     "phoneNumber": "011223344",
     "address": "Prey Veng, Cambodia",
@@ -92,7 +92,7 @@
   {
     "patientId": "p010",
     "fullName": "Sok Heng",
-    "gender": "Male",
+    "gender": "male",
     "dateOfBirth": "1980-04-22T00:00:00Z",
     "phoneNumber": "013223344",
     "address": "Kampong Speu, Cambodia",

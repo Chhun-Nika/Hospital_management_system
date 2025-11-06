@@ -76,6 +76,9 @@ class NurseRepository {
 
   void writeAll(Map<String, Nurse> nurses) {
     final file = File(filePath);
+     if (!file.existsSync()) {
+      throw FileSystemException('File not found: $filePath');
+    }
 
     final data = nurses.values.map((nurse) {
       // convert the working schedule
