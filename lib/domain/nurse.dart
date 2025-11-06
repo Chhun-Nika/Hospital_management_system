@@ -18,5 +18,9 @@ class Nurse extends Staff {
 
   String get doctorId => _doctorId ?? '';
 
-  
+  String? updateAssignedDoctor (String newDoctorId) {
+    if (doctorId == newDoctorId) return "New doctor is the same as current doctor. ";
+    _doctorId = newDoctorId;
+    return null;
+  }
 }

@@ -1,29 +1,54 @@
 [
+ {
+  "staffId": "n001",
+  "name": "nika",
+  "gender": "female",
+  "role": "Nurse",
+  "phoneNumber": "015667788",
+  "email": "sokhalim@hospital.com",
+  "doctorId": "d001",
+  "workingSchedule": {
+   "monday": [
     {
-        "staffId": "n001",
-        "name": "Sokha Lim",
-        "gender": "female",
-        "role": "Nurse",
-        "phoneNumber": "015667788",
-        "email": "sokhalim@hospital.com",
-        "doctorId": "d001",
-        "workingSchedule": {
-            "monday": [{ "start": "07:30", "end": "15:30" }],
-            "wednesday": [{ "start": "07:30", "end": "15:30" }],
-            "friday": [{ "start": "07:30", "end": "12:00" }]
-        }
-    },
-    {
-        "staffId": "n002",
-        "name": "Borey Eng",
-        "gender": "female",
-        "role": "Nurse",
-        "phoneNumber": "010223344",
-        "email": "boreyeng@hospital.com",
-        "doctorId": "d001",
-        "workingSchedule": {
-            "tuesday": [{ "start": "08:00", "end": "16:00" }],
-            "thursday": [{ "start": "08:00", "end": "16:00" }]
-        }
+     "start": "07:30",
+     "end": "15:30"
     }
+   ],
+   "wednesday": [
+    {
+     "start": "07:30",
+     "end": "15:30"
+    }
+   ],
+   "friday": [
+    {
+     "start": "07:30",
+     "end": "12:00"
+    }
+   ]
+  }
+ },
+ {
+  "staffId": "n002",
+  "name": "Borey Eng",
+  "gender": "female",
+  "role": "Nurse",
+  "phoneNumber": "010223344",
+  "email": "boreyeng@hospital.com",
+  "doctorId": "d001",
+  "workingSchedule": {
+   "tuesday": [
+    {
+     "start": "08:00",
+     "end": "16:00"
+    }
+   ],
+   "thursday": [
+    {
+     "start": "08:00",
+     "end": "16:00"
+    }
+   ]
+  }
+ }
 ]
