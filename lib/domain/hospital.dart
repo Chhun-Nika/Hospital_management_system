@@ -29,7 +29,7 @@ class Hospital {
   void addPatients(Map<String, Patient> patients) {
     _patients.addAll(patients);
   }
-
+  
   void addAppointments(Map<String, Appointment> appointments) {
     _appointments.addAll(appointments);
   }
@@ -46,56 +46,65 @@ class Hospital {
   void addDoctor(Doctor doctor) {
     _doctors[doctor.staffId] = doctor;
   }
+  
+  void addPatient(Patient patient) {
+    _patients[patient.patientId] = patient;
+  }
+
+  void addAppointment(Appointment appointment) {
+    _appointments[appointment.appointmentId] = appointment;
+  }
 
   // for accessing and selecting each doctors via number instead of id
   List<MapEntry<String, Doctor>> getDoctorEntries() {
     return _doctors.entries.toList();
   }
 
-  List<MapEntry<String, Patient>> getPatientEntries() {
-  List<MapEntry<String, Patient>> getPatientEntries() {
-    return _patients.entries.toList();
-  }
 
-  // AI helps not fully generated
-  List<Doctor> getEligibleDoctorsForNurse(
-    Map<DayOfWeek, List<TimeSlot>> nurseSchedule,
-  ) {
-    final avaibleDoctors = doctors.values.where((doctor) {
-      // go through nurse working schedule
-      return nurseSchedule.entries.every((entry) {
-        // if a nurse working slot that contains key same as any doctor slots
-        // it will return the list of slots else it returns empty slot
-        final doctorSlots = doctor.workingSchedule[entry.key] ?? [];
-        // this will be true unless all any doctor slots has startTime after the nurse and endTIme before nurse
-        return entry.value.every(
-          (nurseSlot) => doctorSlots.any(
-            (docSlot) =>
-                !nurseSlot.startTime.isBefore(
-                  docSlot.startTime,
-                ) && // nurse start >= doctor start
-                !nurseSlot.endTime.isAfter(docSlot.endTime),
-          ),
-        );
+    List<MapEntry<String, Patient>> getPatientEntries() {
+      return _patients.entries.toList();
+    }
+
+
+    // AI helps not fully generated
+    List<Doctor> getEligibleDoctorsForNurse(
+      Map<DayOfWeek, List<TimeSlot>> nurseSchedule,
+    ) {
+      final avaibleDoctors = doctors.values.where((doctor) {
+        // go through nurse working schedule
+        return nurseSchedule.entries.every((entry) {
+          // if a nurse working slot that contains key same as any doctor slots
+          // it will return the list of slots else it returns empty slot
+          final doctorSlots = doctor.workingSchedule[entry.key] ?? [];
+          // this will be true unless all any doctor slots has startTime after the nurse and endTIme before nurse
+          return entry.value.every(
+            (nurseSlot) => doctorSlots.any(
+              (docSlot) =>
+                  !nurseSlot.startTime.isBefore(
+                    docSlot.startTime,
+                  ) && // nurse start >= doctor start
+                  !nurseSlot.endTime.isAfter(docSlot.endTime),
+            ),
+          );
+        });
       });
-    });
-    return avaibleDoctors.toList();
-  }
+      return avaibleDoctors.toList();
+    }
 
-  String getNursesForDoctorFormatted(String doctorId) {
-    final nursesForDoctor = _nurses.values
-        .where((nurse) => nurse.doctorId == doctorId)
-        // change nurse object to nurse.name for displaying
-        .map((nurse) => nurse.name)
-        .toList();
+    String getNursesForDoctorFormatted(String doctorId) {
+      final nursesForDoctor = _nurses.values
+          .where((nurse) => nurse.doctorId == doctorId)
+          // change nurse object to nurse.name for displaying
+          .map((nurse) => nurse.name)
+          .toList();
 
-    if (nursesForDoctor.isEmpty) return "No nurses assigned";
+      if (nursesForDoctor.isEmpty) return "No nurses assigned";
 
-    return nursesForDoctor.join('\n');
-  }
+      return nursesForDoctor.join('\n');
+    }
 
-  String getDoctorName (String doctorId) {
-    final String name = 'Dr. ${_doctors[doctorId]!.name}';
-    return name;
-  }
+    String getDoctorName(String doctorId) {
+      final String name = 'Dr. ${_doctors[doctorId]!.name}';
+      return name;
+    }
 }

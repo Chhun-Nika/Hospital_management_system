@@ -23,7 +23,7 @@ class HospitalRepository {
     // Load doctors and patients
     hospital.addDoctors(doctorRepo.readAll());
     hospital.addPatients(patientRepo.readAll());
-    hospital.addAppointment(appointmentRepo.readAll());
+    hospital.addAppointments(appointmentRepo.readAll());
     hospital.addNurses(nurseRepo.readAll());
 
     return hospital;
