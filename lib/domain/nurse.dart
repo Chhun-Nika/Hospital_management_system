@@ -1,10 +1,8 @@
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/staff.dart';
-import 'package:hospital_management_system/domain/time_slot.dart';
 
 class Nurse extends Staff {
-  String _doctorId;
-  final Map<DayOfWeek, List<TimeSlot>> _workingSchedule;
+  String? _doctorId;
 
   // using named constructor in order to make the constructor private so it cannot be instantiated outside the class and other subclass 
   Nurse({
@@ -13,14 +11,16 @@ class Nurse extends Staff {
     required super.gender,
     required super.phoneNumber,
     required super.email,
-    required String doctorId,
-    Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
+    String? doctorId,
+    required super.workingSchedule,
   }) : _doctorId = doctorId,
-       _workingSchedule = workingSchedule ?? {},
        super(role: Role.nurse, staffId: id);
 
-  String get doctorId => _doctorId;
-  Map<DayOfWeek, List<TimeSlot>> get workingSchedule => _workingSchedule;
+  String get doctorId => _doctorId ?? '';
 
-  
+  String? updateAssignedDoctor (String newDoctorId) {
+    if (doctorId == newDoctorId) return "New doctor is the same as current doctor. ";
+    _doctorId = newDoctorId;
+    return null;
+  }
 }

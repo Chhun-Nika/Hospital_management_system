@@ -1,112 +1,101 @@
 [
-  {
-    "patientId": "p001",
-    "fullName": "Ly Sopha",
-    "gender": "Female",
-    "dateOfBirth": "1995-03-12T00:00:00Z",
-    "phoneNumber": "0971234567",
-    "address": "Phnom Penh, Cambodia",
-    "emergencyContact": "0972233445",
-    "status": "active",
-    "appointmentIds": ["apt-001", "apt-007"]
-  },
-  {
-    "patientId": "p002",
-    "fullName": "Khim Vannak",
-    "gender": "Male",
-    "dateOfBirth": "1988-07-25T00:00:00Z",
-    "phoneNumber": "096112233",
-    "address": "Siem Reap, Cambodia",
-    "emergencyContact": "0964455667",
-    "status": "active",
-    "appointmentIds": ["apt-002"]
-  },
-  {
-    "patientId": "p003",
-    "fullName": "Chau Dara",
-    "gender": "Female",
-    "dateOfBirth": "1979-11-19T00:00:00Z",
-    "phoneNumber": "095667788",
-    "address": "Battambang, Cambodia",
-    "emergencyContact": "095998877",
-    "status": "active",
-    "appointmentIds": ["apt-003"]
-  },
-  {
-    "patientId": "p004",
-    "fullName": "Sok Kim",
-    "gender": "Male",
-    "dateOfBirth": "1992-01-05T00:00:00Z",
-    "phoneNumber": "094223344",
-    "address": "Kampong Cham, Cambodia",
-    "emergencyContact": "094556677",
-    "status": "active",
-    "appointmentIds": ["apt-004"]
-  },
-  {
-    "patientId": "p005",
-    "fullName": "Chum Lina",
-    "gender": "Female",
-    "dateOfBirth": "1985-05-16T00:00:00Z",
-    "phoneNumber": "011445566",
-    "address": "Phnom Penh, Cambodia",
-    "emergencyContact": "011998877",
-    "status": "active",
-    "appointmentIds": ["apt-005"]
-  },
-  {
-    "patientId": "p006",
-    "fullName": "Nary Phan",
-    "gender": "Female",
-    "dateOfBirth": "1990-02-20T00:00:00Z",
-    "phoneNumber": "097556677",
-    "address": "Takeo, Cambodia",
-    "emergencyContact": "097665544",
-    "status": "active",
-    "appointmentIds": ["apt-006"]
-  },
-  {
-    "patientId": "p007",
-    "fullName": "Sareth Kong",
-    "gender": "Male",
-    "dateOfBirth": "1983-10-10T00:00:00Z",
-    "phoneNumber": "012334455",
-    "address": "Siem Reap, Cambodia",
-    "emergencyContact": "012667788",
-    "status": "active",
-    "appointmentIds": ["apt-007"]
-  },
-  {
-    "patientId": "p008",
-    "fullName": "Vanna Meas",
-    "gender": "Female",
-    "dateOfBirth": "1997-08-15T00:00:00Z",
-    "phoneNumber": "010998877",
-    "address": "Kampong Thom, Cambodia",
-    "emergencyContact": "010445566",
-    "status": "active",
-    "appointmentIds": ["apt-008"]
-  },
-  {
-    "patientId": "p009",
-    "fullName": "Phal Srey",
-    "gender": "Female",
-    "dateOfBirth": "1994-06-05T00:00:00Z",
-    "phoneNumber": "011223344",
-    "address": "Prey Veng, Cambodia",
-    "emergencyContact": "011556677",
-    "status": "active",
-    "appointmentIds": ["apt-009"]
-  },
-  {
-    "patientId": "p010",
-    "fullName": "Sok Heng",
-    "gender": "Male",
-    "dateOfBirth": "1980-04-22T00:00:00Z",
-    "phoneNumber": "013223344",
-    "address": "Kampong Speu, Cambodia",
-    "emergencyContact": "013667788",
-    "status": "active",
-    "appointmentIds": ["apt-010"]
-  }
+ {
+  "patientId": "p001",
+  "fullName": "nika",
+  "gender": "female",
+  "dateOfBirth": "1995-03-12T00:00:00.000Z",
+  "phoneNumber": "0971234567",
+  "address": "Phnom Penh, Cambodia",
+  "emergencyContact": "0972233445"
+ },
+ {
+  "patientId": "p002",
+  "fullName": "Khim Vannak",
+  "gender": "male",
+  "dateOfBirth": "1988-07-25T00:00:00.000Z",
+  "phoneNumber": "096112233",
+  "address": "Siem Reap, Cambodia",
+  "emergencyContact": "0964455667"
+ },
+ {
+  "patientId": "p003",
+  "fullName": "Chau Dara",
+  "gender": "female",
+  "dateOfBirth": "1979-11-19T00:00:00.000Z",
+  "phoneNumber": "095667788",
+  "address": "Battambang, Cambodia",
+  "emergencyContact": "095998877"
+ },
+ {
+  "patientId": "p004",
+  "fullName": "Sok Kim",
+  "gender": "male",
+  "dateOfBirth": "1992-01-05T00:00:00.000Z",
+  "phoneNumber": "094223344",
+  "address": "Kampong Cham, Cambodia",
+  "emergencyContact": "094556677"
+ },
+ {
+  "patientId": "p005",
+  "fullName": "Chum Lina",
+  "gender": "female",
+  "dateOfBirth": "1985-05-16T00:00:00.000Z",
+  "phoneNumber": "011445566",
+  "address": "Phnom Penh, Cambodia",
+  "emergencyContact": "011998877"
+ },
+ {
+  "patientId": "p006",
+  "fullName": "Nary Phan",
+  "gender": "female",
+  "dateOfBirth": "1990-02-20T00:00:00.000Z",
+  "phoneNumber": "097556677",
+  "address": "Takeo, Cambodia",
+  "emergencyContact": "097665544"
+ },
+ {
+  "patientId": "p007",
+  "fullName": "Sareth Kong",
+  "gender": "male",
+  "dateOfBirth": "1983-10-10T00:00:00.000Z",
+  "phoneNumber": "012334455",
+  "address": "Siem Reap, Cambodia",
+  "emergencyContact": "012667788"
+ },
+ {
+  "patientId": "p008",
+  "fullName": "Vanna Meas",
+  "gender": "female",
+  "dateOfBirth": "1997-08-15T00:00:00.000Z",
+  "phoneNumber": "010998877",
+  "address": "Kampong Thom, Cambodia",
+  "emergencyContact": "010445566"
+ },
+ {
+  "patientId": "p009",
+  "fullName": "Phal Srey",
+  "gender": "female",
+  "dateOfBirth": "1994-06-05T00:00:00.000Z",
+  "phoneNumber": "011223344",
+  "address": "Prey Veng, Cambodia",
+  "emergencyContact": "011556677"
+ },
+ {
+  "patientId": "p010",
+  "fullName": "Sok Heng",
+  "gender": "male",
+  "dateOfBirth": "1980-04-22T00:00:00.000Z",
+  "phoneNumber": "013223344",
+  "address": "Kampong Speu, Cambodia",
+  "emergencyContact": "013667788"
+ },
+ {
+  "patientId": "8bb8e304-9671-435d-acd7-8966b9bbae8d",
+  "fullName": "tyui",
+  "gender": "male",
+  "dateOfBirth": "2006-09-09T00:00:00.000",
+  "phoneNumber": "1234567890",
+  "address": "home",
+  "emergencyContact": "0987654321"
+ }
 ]

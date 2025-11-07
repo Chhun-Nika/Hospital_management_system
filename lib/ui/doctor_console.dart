@@ -1,62 +1,100 @@
 import 'dart:io';
 
 import 'package:cli_table/cli_table.dart';
-import 'package:hospital_management_system/domain/hospital.dart';
+import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/main.dart';
+import 'package:hospital_management_system/ui/staff_console.dart';
 
+class DoctorConsole extends StaffConsole<Doctor> {
+  DoctorConsole({required super.hospital});
 
-class DoctorConsole {
-  final Hospital hospital;
-  DoctorConsole({required this.hospital});
-
-  void startDoctorConsole() {
+  @override
+  void startConsole() {
     bool inSubmenu = true;
+
     do {
       clearScreen();
       print('-- Doctor Management --\n');
       print('1. View all Doctors');
-      print('2. Update Doctors Information');
+      print('2. Create new Doctor');
+      print('3. Update Doctors Information');
       print('0. Exit to Staff Management\n');
-
-      String? userInput;
       stdout.write("Enter your choice: ");
-      userInput = stdin.readLineSync();
+      String userInput = stdin.readLineSync() ?? '';
 
-      switch (userInput) {
+      switch (userInput.trim()) {
         case '1':
-          clearScreen();
-          print("-- Doctors --");
-          viewDoctors();
-          pressEnterToContinue();
+          viewStaff();
+          // pressToExit();
           break;
         case '2':
+          createStaff();
           pressEnterToContinue();
+          break;
+        case '3':
+          updateDoctor();
+          break;
+        // pressEnterToContinue();
         case '0':
           inSubmenu = false;
           break;
         default:
-          print("Invalid choice. Try again.");
+          warning("Invalid choice. Try again.");
           pressEnterToContinue();
       }
     } while (inSubmenu);
   }
 
-  void viewDoctors () {
-    if(hospital.doctors.isEmpty) {
-      print("No Doctors.");
-    }
-    final headers = ['No.', 'Name', 'Gender', 'Email', 'Phone Number', 'Working Schedule'];
+  @override
+  void viewStaff() {
+  if (hospital.doctors.isEmpty) {
+    print("No Doctors.");
+    return;
+  }
+
+  while (true) {
+    clearScreen();
+    print("-- Doctors --");
+    final headers = [
+      'No.',
+      'Name',
+      'Gender',
+      'Specialization',
+      'Email',
+      'Phone Number',
+      'Working Schedule',
+      'Assisted By',
+      'Booked Slots'
+    ];
+
     final List<List<dynamic>> rows = [];
     int number = 1;
+
     hospital.doctors.forEach((id, doc) {
+      String formatName = 'Dr. ${doc.name}';
+
+      // Format booked slots per doctor
+      String bookedSlots = '';
+      doc.bookedSlots.forEach((date, slots) {
+        for (var slot in slots) {
+          bookedSlots +=
+              "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} "
+              "${slot.startTime.format()} - ${slot.endTime.format()}\n";
+        }
+      });
+
+      bookedSlots = bookedSlots.isEmpty ? 'No appointments' : bookedSlots.trim();
+
       rows.add([
-        // doc.staffId,
         number,
-        doc.name,
+        formatName,
         doc.gender.name,
+        doc.specialization,
         doc.email,
         doc.phoneNumber,
-        doc.formatWorkingSchedule()
+        doc.formatWorkingSchedule(),
+        hospital.getNursesForDoctorFormatted(doc.staffId),
+        bookedSlots
       ]);
       number++;
     });
@@ -64,11 +102,213 @@ class DoctorConsole {
     final table = Table(header: headers);
     table.addAll(rows);
     print(table);
+
+    // Option to view appointments for a specific doctor
+    print("\nEnter doctor number to view their appointments:");
+    stdout.write("- Doctor No (or 'q' to quit): ");
+    String input = stdin.readLineSync()?.trim() ?? '';
+    if (input.toLowerCase() == 'q') return;
+
+    final index = int.tryParse(input);
+    if (index == null || index < 1 || index > hospital.doctors.length) {
+      print("Invalid doctor number. Press Enter to continue...");
+      stdin.readLineSync();
+      continue; // go back to the main doctors table
+    }
+
+    final selectedDoctor = hospital.doctors.values.elementAt(index - 1);
+    final appointments = hospital.appointments.values
+        .where((appt) => appt.doctorId == selectedDoctor.staffId)
+        .toList();
+
+    clearScreen();
+    print("\nAppointments for Dr. ${selectedDoctor.name}:");
+
+    if (appointments.isEmpty) {
+      print("No appointments booked for this doctor.");
+    } else {
+      final apptHeaders = [
+        'Patient',
+        'Date',
+        'Time',
+        'Duration',
+        'Reason',
+        'Status',
+        'Doctor Notes'
+      ];
+      final apptRows = <List<dynamic>>[];
+
+      for (var appt in appointments) {
+        final patientName =
+            hospital.patients[appt.patientId]?.fullName ?? 'Unknown';
+        final date = "${appt.appointmentDateTime.year}-"
+            "${appt.appointmentDateTime.month.toString().padLeft(2, '0')}-"
+            "${appt.appointmentDateTime.day.toString().padLeft(2, '0')}";
+        final time = "${appt.appointmentDateTime.hour.toString().padLeft(2, '0')}:"
+            "${appt.appointmentDateTime.minute.toString().padLeft(2, '0')}";
+
+        apptRows.add([
+          patientName,
+          date,
+          time,
+          appt.duration,
+          appt.reason ?? 'null',
+          appt.appointmentStatus.name,
+          appt.doctorNotes ?? 'null'
+        ]);
+      }
+
+      final apptTable = Table(header: apptHeaders);
+      apptTable.addAll(apptRows);
+      print(apptTable);
+    }
+
+    pressEnterToContinue(); // wait for user
+    // Loop continues and shows the doctors table again
+  }
+}
+
+  void updateDoctor() {
+    clearScreen();
+    // viewDoctors();
+    final List<MapEntry<String, Doctor>> doctorList = hospital
+        .getDoctorEntries();
+    do {
+      // clearScreen();
+      viewStaff();
+
+      print("\n-- Select a doctor to update by No. --\n");
+      stdout.write('Enter your choice (q to exit): ');
+      String userInput = stdin.readLineSync() ?? '';
+      if (userInput.trim().isEmpty) {
+        warning("\n** Input cannot be empty. **\n");
+        // clearScreen();
+      } else if (userInput.toLowerCase() == 'q') {
+        clearScreen();
+        print("-- Doctor Management --");
+        viewStaff(); // Display table before returning
+        break;
+      } else {
+        try {
+          final int parseInput = int.parse(userInput);
+
+          if (parseInput > 0 && parseInput <= doctorList.length) {
+            clearScreen();
+            doctorDetailDisplay(doctorList, parseInput);
+          } else {
+            warning(
+              '\n** Please enter a valid input (refer to table No. for input range) **\n',
+            );
+            pressEnterToContinue();
+          }
+        } catch (e) {
+          warning(
+            '\n** Invalid input. Please enter a number or q to quit. **\n',
+          );
+          pressEnterToContinue();
+        }
+      }
+    } while (true);
   }
 
-  void updateDoctor () {
-    viewDoctors();
-    
+  void doctorDetailDisplay(
+    List<MapEntry<String, Doctor>> doctorList,
+    int userInput,
+  ) {
+    final MapEntry<String, Doctor> selectedDoctor = doctorList[userInput - 1];
+
+    bool stillUpdate = true;
+    String updateInput;
+
+    do {
+      clearScreen();
+      String nameFormat = 'Dr. ${selectedDoctor.value.name}';
+      print('Dr. ${selectedDoctor.value.name}\'s infromation');
+      final headers = [
+        'No.',
+        'Name',
+        'Gender',
+        'Specialization',
+        'Email',
+        'Phone Number',
+        'Working Schedule',
+      ];
+      final row = [
+        userInput,
+        nameFormat,
+        selectedDoctor.value.gender.name,
+        selectedDoctor.value.specialization,
+        selectedDoctor.value.email,
+        selectedDoctor.value.phoneNumber,
+        selectedDoctor.value.formatWorkingSchedule(),
+      ];
+      final table = Table(header: headers);
+      table.add(row);
+      print(table);
+      print("\n-- Select any field to update --\n");
+      print('1. Name');
+      print('2. Gender');
+      print('3. Specialization');
+      print('4. Email');
+      print('5. Phone Number');
+      print('6. Working Schedule');
+      print('0. Exit update mode to main update page');
+
+      stdout.write('\nEnter your choice: ');
+      updateInput = stdin.readLineSync() ?? '';
+      switch (updateInput.trim()) {
+        case '1':
+          updateName(selectedDoctor);
+          break;
+        case '2':
+          updateGender(selectedDoctor);
+          break;
+        case '3':
+          updateSpecialization(selectedDoctor);
+          break;
+        case '4':
+          updateEmail(selectedDoctor);
+          break;
+        case '5':
+          updatePhoneNumber(selectedDoctor);
+          break;
+        case '6':
+          updateWorkingSchedule(selectedDoctor);
+          break;
+        case '0':
+          stillUpdate = false;
+          break;
+        default:
+          warning("Invalid choice. Try again.");
+          pressEnterToContinue(text: "Press enter to input again.");
+      }
+    } while (stillUpdate);
   }
 
+  void updateSpecialization(MapEntry<String, Doctor> selectedDoctor) {
+    clearScreen();
+    print("\n-- Update Specialization --\n");
+    print("** Current Specialization: ${selectedDoctor.value.specialization}");
+
+    do {
+      stdout.write("\nEnter new Specialization: ");
+      String input = stdin.readLineSync() ?? '';
+
+      if (input.trim().isEmpty) {
+        warning("\n** Input can't be empty. **\n");
+        continue;
+      }
+      String? message = selectedDoctor.value.updateSpecialization(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+
+      success('\n** Specialization is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
+    } while (true);
+  }
+
+  
 }
