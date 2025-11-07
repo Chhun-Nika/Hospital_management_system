@@ -7,7 +7,7 @@ class Doctor extends Staff {
   String _specialization;
   // final List<String> _appointmentIds;
   // store the time or slots that has been booked - avoid overlapping appointment dateTime
-  final Map<DateTime, List<TimeSlot>> _bookedSlots;
+  Map<DateTime, List<TimeSlot>> _bookedSlots;
 
   // using super to call
   Doctor({
@@ -82,11 +82,19 @@ class Doctor extends Staff {
       minute: appointmentEndTime.minute,
     );
 
-    return slots.any(
-      (slot) =>
-          appointmentStart.isAfter(slot.startTime) &&
-          appointmentEnd.isBefore(slot.endTime),
-    );
+    // return slots.any(
+    //   (slot) =>
+    //       appointmentStart.isAfter(slot.startTime) &&
+    //       appointmentEnd.isBefore(slot.endTime),
+    // );
+    return slots.any((slot) {
+    // start >= slot.startTime && end <= slot.endTime
+    final startsOnOrAfter = appointmentStart.isAfter(slot.startTime) || 
+    (appointmentStart.hour == slot.startTime.hour && appointmentStart.minute == slot.startTime.minute);
+    final endsOnOrBefore = appointmentEnd.isBefore(slot.endTime) || 
+   (appointmentEnd.hour == slot.endTime.hour && appointmentEnd.minute == slot.endTime.minute);
+    return startsOnOrAfter && endsOnOrBefore;
+  });
   }
 
   // Check if appointment overlaps with existing booked slots
@@ -195,5 +203,25 @@ class Doctor extends Staff {
     _specialization = newSpecialization;
     return null;
   }
+
+  void removeBookedSlot(DateTime dateTime, int durationMinutes) {
+    final dayKey = _dateOnly(dateTime);
+    final slots = _bookedSlots[dayKey];
+    if (slots == null) return;
+
+    final appointmentStart = TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+    final appointmentEndTime = dateTime.add(Duration(minutes: durationMinutes));
+    final appointmentEnd = TimeOfDay(hour: appointmentEndTime.hour, minute: appointmentEndTime.minute);
+
+    // Remove the slot that exactly matches this appointment
+    _bookedSlots[dayKey] = slots.where((slot) {
+      final isDifferent =
+          slot.startTime.isBefore(appointmentStart) || slot.endTime.isAfter(appointmentEnd);
+      return isDifferent;
+    }).toList();
+  }
+
+
+
 
 }
