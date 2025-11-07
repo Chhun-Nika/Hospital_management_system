@@ -25,7 +25,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
       switch (userInput.trim()) {
         case '1':
           viewStaff();
-          pressToExit();
+          // pressToExit();
           break;
         case '2':
           createStaff();
@@ -47,10 +47,13 @@ class DoctorConsole extends StaffConsole<Doctor> {
 
   @override
   void viewStaff() {
-    // clearScreen();
-    if (hospital.doctors.isEmpty) {
-      print("No Doctors.");
-    }
+  if (hospital.doctors.isEmpty) {
+    print("No Doctors.");
+    return;
+  }
+
+  while (true) {
+    clearScreen();
     print("-- Doctors --");
     final headers = [
       'No.',
@@ -60,15 +63,29 @@ class DoctorConsole extends StaffConsole<Doctor> {
       'Email',
       'Phone Number',
       'Working Schedule',
-      'Assisted By'
+      'Assisted By',
+      'Booked Slots'
     ];
+
     final List<List<dynamic>> rows = [];
     int number = 1;
 
     hospital.doctors.forEach((id, doc) {
       String formatName = 'Dr. ${doc.name}';
+
+      // Format booked slots per doctor
+      String bookedSlots = '';
+      doc.bookedSlots.forEach((date, slots) {
+        for (var slot in slots) {
+          bookedSlots +=
+              "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} "
+              "${slot.startTime.format()} - ${slot.endTime.format()}\n";
+        }
+      });
+
+      bookedSlots = bookedSlots.isEmpty ? 'No appointments' : bookedSlots.trim();
+
       rows.add([
-        // doc.staffId,
         number,
         formatName,
         doc.gender.name,
@@ -76,7 +93,8 @@ class DoctorConsole extends StaffConsole<Doctor> {
         doc.email,
         doc.phoneNumber,
         doc.formatWorkingSchedule(),
-        hospital.getNursesForDoctorFormatted(doc.staffId)
+        hospital.getNursesForDoctorFormatted(doc.staffId),
+        bookedSlots
       ]);
       number++;
     });
@@ -84,7 +102,71 @@ class DoctorConsole extends StaffConsole<Doctor> {
     final table = Table(header: headers);
     table.addAll(rows);
     print(table);
+
+    // Option to view appointments for a specific doctor
+    print("\nEnter doctor number to view their appointments:");
+    stdout.write("- Doctor No (or 'q' to quit): ");
+    String input = stdin.readLineSync()?.trim() ?? '';
+    if (input.toLowerCase() == 'q') return;
+
+    final index = int.tryParse(input);
+    if (index == null || index < 1 || index > hospital.doctors.length) {
+      print("Invalid doctor number. Press Enter to continue...");
+      stdin.readLineSync();
+      continue; // go back to the main doctors table
+    }
+
+    final selectedDoctor = hospital.doctors.values.elementAt(index - 1);
+    final appointments = hospital.appointments.values
+        .where((appt) => appt.doctorId == selectedDoctor.staffId)
+        .toList();
+
+    clearScreen();
+    print("\nAppointments for Dr. ${selectedDoctor.name}:");
+
+    if (appointments.isEmpty) {
+      print("No appointments booked for this doctor.");
+    } else {
+      final apptHeaders = [
+        'Patient',
+        'Date',
+        'Time',
+        'Duration',
+        'Reason',
+        'Status',
+        'Doctor Notes'
+      ];
+      final apptRows = <List<dynamic>>[];
+
+      for (var appt in appointments) {
+        final patientName =
+            hospital.patients[appt.patientId]?.fullName ?? 'Unknown';
+        final date = "${appt.appointmentDateTime.year}-"
+            "${appt.appointmentDateTime.month.toString().padLeft(2, '0')}-"
+            "${appt.appointmentDateTime.day.toString().padLeft(2, '0')}";
+        final time = "${appt.appointmentDateTime.hour.toString().padLeft(2, '0')}:"
+            "${appt.appointmentDateTime.minute.toString().padLeft(2, '0')}";
+
+        apptRows.add([
+          patientName,
+          date,
+          time,
+          appt.duration,
+          appt.reason ?? 'null',
+          appt.appointmentStatus.name,
+          appt.doctorNotes ?? 'null'
+        ]);
+      }
+
+      final apptTable = Table(header: apptHeaders);
+      apptTable.addAll(apptRows);
+      print(apptTable);
+    }
+
+    pressEnterToContinue(); // wait for user
+    // Loop continues and shows the doctors table again
   }
+}
 
   void updateDoctor() {
     clearScreen();

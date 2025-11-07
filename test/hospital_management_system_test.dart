@@ -3,8 +3,10 @@ import 'package:hospital_management_system/data/doctor_repository.dart';
 import 'package:hospital_management_system/data/hospital_repository.dart';
 import 'package:hospital_management_system/data/nurse_repository.dart';
 import 'package:hospital_management_system/data/patient_repository.dart';
+import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
+import 'package:hospital_management_system/domain/patient.dart';
 import 'package:hospital_management_system/domain/time_of_day.dart';
 import 'package:hospital_management_system/domain/time_slot.dart';
 import 'package:test/test.dart';
@@ -12,6 +14,8 @@ import 'package:test/test.dart';
 void main() {
   late Hospital hospital;
   late HospitalRepository hospitalRepository;
+  late Doctor doctor;
+  late Patient patient;
 
   setUpAll(() {
     // Initialize repositories
@@ -29,6 +33,32 @@ void main() {
 
     // Load all data once for all tests
     hospital = hospitalRepository.loadAll();
+
+    // create doctor and patient for appointment test
+    doctor = hospital.createDoctor(
+      name: 'Dr. Smith',
+      gender: Gender.male,
+      phoneNumber: '0123456789',
+      email: 'drsmith@example.com',
+      specialization: 'Cardiology',
+      workingSchedule: {
+        DayOfWeek.monday: [
+          TimeSlot(
+            startTime: TimeOfDay(hour: 9, minute: 0),
+            endTime: TimeOfDay(hour: 17, minute: 0),
+          ),
+        ],
+      },
+    );
+    // create patient since without patient the appointment cannot exist
+    patient = hospital.createPatient(
+      name: 'John Doe',
+      gender: Gender.male,
+      dateOfBirth: DateTime(1990, 5, 20),
+      phoneNumber: '0123456789',
+      address: '123 Main Street',
+      emergencyContact: '0987654321',
+    );
   });
 
   group('Hospital I/O', () {
@@ -270,6 +300,138 @@ void main() {
       // Invalid update
       final invalidResult = patient.updatePhoneNumber('0123');
       expect(invalidResult, 'Invalid phone number: 0123');
+    });
+
+    group("Appointment Management", () {
+      // create doctor
+
+      test('Create appointment with valid data', () {
+        final appointmentDateTime = DateTime(2025, 11, 10, 10, 0); // Monday
+        final duration = 60;
+
+        // Ensure doctor is available
+        expect(doctor.isWorkingAt(appointmentDateTime, duration), isTrue);
+        expect(doctor.hasConflict(appointmentDateTime, duration), isFalse);
+
+        // Create appointment
+        final appointment = hospital.createAppointment(
+          patientId: patient.patientId,
+          doctorId: doctor.staffId,
+          appointmentDateTime: appointmentDateTime,
+          duration: duration,
+          reason: 'Regular checkup',
+          doctorNotes: 'Initial note',
+        );
+
+        // Book the slot
+        doctor.bookSlot(appointmentDateTime, duration);
+
+        // Validate appointment fields
+        expect(appointment.patientId, patient.patientId);
+        expect(appointment.doctorId, doctor.staffId);
+        expect(appointment.appointmentDateTime, appointmentDateTime);
+        expect(appointment.duration, duration);
+        expect(appointment.reason, 'Regular checkup');
+        expect(appointment.doctorNotes, 'Initial note');
+        expect(appointment.appointmentStatus, AppointmentStatus.scheduled);
+
+        // Doctor should have the slot booked
+        expect(doctor.hasConflict(appointmentDateTime, duration), isTrue);
+      });
+
+      test('Appointment time not aligned with doctor schedule', () {
+        // Try to create an appointment outside this schedule
+        final appointmentDateTime = DateTime(
+          2025,
+          11,
+          10,
+          23,
+          0,
+        ); // Monday 18:00
+        final duration = 1; // 1 hour
+
+        // Doctor should NOT be working at this time
+        expect(doctor.isWorkingAt(appointmentDateTime, duration), isFalse);
+
+        // Try to get available doctors for this time
+        final availableDoctors = hospital.getAvailableDoctors(
+          appointmentDateTime,
+          duration,
+        );
+        expect(availableDoctors.contains(doctor), isFalse);
+
+        // If you try to create an appointment, it should detect no available doctor
+        expect(availableDoctors.isEmpty, isTrue);
+      });
+      test('Prevent overlapping appointments', () {
+        final appointmentDateTime = DateTime(2025, 11, 10, 11, 0);
+        final duration = 60;
+
+        // First appointment
+        final firstAppointment = hospital.createAppointment(
+          patientId: patient.patientId,
+          doctorId: doctor.staffId,
+          appointmentDateTime: appointmentDateTime,
+          duration: duration,
+          reason: 'Regular checkup',
+          doctorNotes: 'Initial note',
+        );
+        doctor.bookSlot(appointmentDateTime, duration);
+
+        // Second appointment at the same time
+        final conflictAppointment = hospital.createAppointment(
+          patientId: patient.patientId,
+          doctorId: doctor.staffId,
+          appointmentDateTime: appointmentDateTime,
+          duration: duration,
+          reason: 'Regular checkup',
+          doctorNotes: 'Initial note',
+        );
+
+        // Doctor should detect conflict
+        expect(doctor.hasConflict(appointmentDateTime, duration), isTrue);
+      });
+    });
+    test('Update appointment reason, note, duration, and status', () {
+      final appointmentDateTime = DateTime(2025, 11, 10, 13, 0);
+      final appointment = hospital.createAppointment(
+        patientId: patient.patientId,
+        doctorId: doctor.staffId,
+        appointmentDateTime: appointmentDateTime,
+        duration: 2,
+        reason: 'Checkup',
+        doctorNotes: 'Note 1',
+      );
+
+      // Update reason
+      final reasonResult = appointment.updateReason('Follow-up check');
+      expect(reasonResult, isNull);
+      expect(appointment.reason, 'Follow-up check');
+
+      // Updating to same reason returns message
+      final sameReasonResult = appointment.updateReason('Follow-up check');
+      expect(sameReasonResult, 'New Reason is the same as current reason.');
+
+      // Update doctor note
+      final noteResult = appointment.updateNote('Updated note');
+      expect(noteResult, isNull);
+      expect(appointment.doctorNotes, 'Updated note');
+
+      // Update duration
+      final durationResult = appointment.updateDduration(3);
+      expect(durationResult, isNull);
+      expect(appointment.duration, 3);
+
+      // Update status to cancelled and remove booked slot
+      doctor.bookSlot(appointmentDateTime, 1); // Book the slot first
+      final statusResult = appointment.updateStatus(
+        AppointmentStatus.cancel,
+        hospital,
+      );
+      expect(statusResult, isNull);
+      expect(appointment.appointmentStatus, AppointmentStatus.cancel);
+      // Doctor should no longer have the slot
+      expect(doctor.hasConflict(appointmentDateTime, 1), isFalse);
     });
   });
 }

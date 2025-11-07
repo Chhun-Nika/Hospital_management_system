@@ -7,7 +7,7 @@
   "duration": 2,
   "reason": "Cardiac check-up",
   "appointmentStatus": "scheduled",
-  "doctorNotes": null
+  "doctorNotes": "hello world"
  },
  {
   "appointmentId": "apt-002",

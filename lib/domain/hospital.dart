@@ -239,4 +239,32 @@ class Hospital {
     }
     return availableDoctors;
   }
+  /// Returns a list of appointments for a specific doctor
+List<Map<String, dynamic>> getAppointmentsForDoctor(String doctorId) {
+  final List<Map<String, dynamic>> result = [];
+
+  _appointments.forEach((id, appointment) {
+    if (appointment.doctorId == doctorId) {
+      // Find patient name
+      final patientName =
+          _patients[appointment.patientId]?.fullName ?? 'Unknown';
+
+      result.add({
+        'Appointment ID': appointment.appointmentId,
+        'Patient': patientName,
+        'Date': "${appointment.appointmentDateTime.year}-"
+            "${appointment.appointmentDateTime.month.toString().padLeft(2, '0')}-"
+            "${appointment.appointmentDateTime.day.toString().padLeft(2, '0')}",
+        'Time': "${appointment.appointmentDateTime.hour.toString().padLeft(2, '0')}:"
+            "${appointment.appointmentDateTime.minute.toString().padLeft(2, '0')}",
+        'Duration (min)': appointment.duration,
+        'Reason': appointment.reason ?? '',
+        'Status': appointment.appointmentStatus.name,
+        'Doctor Notes': appointment.doctorNotes ?? '',
+      });
+    }
+  });
+
+  return result;
+}
 }

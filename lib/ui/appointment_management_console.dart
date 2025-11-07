@@ -36,8 +36,6 @@ class AppointmentManagementConsole {
 
       switch (userInput) {
         case '1':
-          clearScreen();
-          print("-- Appointments --");
           viewAppointment();
           pressEnterToContinue();
           break;
@@ -63,6 +61,8 @@ class AppointmentManagementConsole {
   }
 
   void viewAppointment() {
+    clearScreen();
+    print("-- Appointments --");
     if (hospital.appointments.isEmpty) {
       print("** No Appointment **\n");
     }
@@ -111,13 +111,13 @@ class AppointmentManagementConsole {
     print(table);
   }
 
-  // AI-generated : fucntion warning message
-  void warning(String message) {
-    // ANSI escape code for yellow text
-    const yellow = '\x1B[33m';
-    const reset = '\x1B[0m';
-    print('\n$yellow WARNING: $message$reset');
-  }
+  // // AI-generated : fucntion warning message
+  // void warning(String message) {
+  //   // ANSI escape code for yellow text
+  //   const yellow = '\x1B[33m';
+  //   const reset = '\x1B[0m';
+  //   print('\n$yellow WARNING: $message$reset');
+  // }
 
   void createAppointment(String patientId) {
     warning("All information must be filled in order to create Appointment.\n");
@@ -142,13 +142,13 @@ class AppointmentManagementConsole {
 
           // Check if the date is in the past
           if (appointmentDateTime.isBefore(DateTime.now())) {
-            print("** The appointment time must be current or future **\n");
+            warning("** The appointment time must be current or future **\n");
             continue;
           }
 
           break; // valid date
         } catch (e) {
-          print("Invalid date format, try again.");
+          warning("Invalid date format, try again.");
         }
       }
 
@@ -168,7 +168,7 @@ class AppointmentManagementConsole {
       availableDoctors = hospital.getAvailableDoctors(appointmentDateTime, duration);
 
       if (availableDoctors.isEmpty) {
-        print("\n** There are no doctors available at this time. Try another date/time. **\n");
+        warning("\n** There are no doctors available at this time. Try another date/time. **\n");
       }
     }
 
@@ -181,13 +181,13 @@ class AppointmentManagementConsole {
       stdout.write('\n- Select Doctor No: ');
       final selectedDoctor = stdin.readLineSync()?.trim() ?? '';
       if (selectedDoctor.isEmpty || selectedDoctor.toLowerCase() == 'q') {
-        print("** Invalid selection **\n");
+        warning("** Invalid selection **\n");
         return;
       }
 
       final index = int.tryParse(selectedDoctor);
       if (index == null || index < 1 || index > availableDoctors.length) {
-        print("** Invalid number. Try again. **\n");
+        warning("** Invalid number. Try again. **\n");
         continue;
       }
 
@@ -213,13 +213,13 @@ class AppointmentManagementConsole {
       break;
     }
 
-    final appointment = Appointment(
+    final appointment = hospital.createAppointment(
       patientId: patientId,
       doctorId: doctorId,
-      dateTime: appointmentDateTime,
+      appointmentDateTime: appointmentDateTime,
       duration: duration,
-      reasons: reason,
-      appointmentStatus: AppointmentStatus.scheduled,
+      reason: reason,
+      status: AppointmentStatus.scheduled,
       doctorNotes: doctorNote,
     );
 
@@ -227,7 +227,7 @@ class AppointmentManagementConsole {
     final doctor = hospital.doctors[doctorId];
     doctor?.bookSlot(appointmentDateTime, duration);
 
-    print("\n** Appointment created successfully **");
+    success("\n** Appointment created successfully **");
     pressEnterToContinue();
   }
 
@@ -257,7 +257,7 @@ class AppointmentManagementConsole {
       createAppointment(selectPatient.key);
       clearScreen();
       patientConsole?.viewPatient();
-      print("\n** select patient by No to create appointmen **");
+      print("\n** select patient by No to create appointment **");
     }
   }
 
@@ -271,7 +271,7 @@ class AppointmentManagementConsole {
       stdout.write('\nEnter your Choice (or q to quit): ');
       String input = stdin.readLineSync() ?? '';
       if (input.trim().isEmpty) {
-        print("\n** Input cannot be empty. **\n");
+        warning("\n** Input cannot be empty. **\n");
       } else if (input.toLowerCase() == 'q') {
         clearScreen();
         startAppointmentConsole();
@@ -283,12 +283,12 @@ class AppointmentManagementConsole {
             clearScreen();
             appointmentDetail(appointmentList, parseInput);
           } else {
-            print(
+            warning(
               '\n** Please enter a valid input (refer to table No. for input range) **\n',
             );
           }
         } catch (e) {
-          print('\n** Invalid input. Please enter a number or q to quit. **\n');
+          warning('\n** Invalid input. Please enter a number or q to quit. **\n');
         }
       }
     } while (true);
@@ -355,7 +355,7 @@ class AppointmentManagementConsole {
           stillUpdate = false;
           break;
         default:
-          print("Tnvalid choice. Try again.");
+          print("Invalid choice. Try again.");
           pressEnterToContinue(text: "Press enter to input again.");
       }
     } while (stillUpdate);
@@ -371,7 +371,7 @@ class AppointmentManagementConsole {
       String? input = stdin.readLineSync();
 
       if (input == null || input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
+        warning("\n** Input can't be empty. **\n");
         continue;
       }
 
@@ -383,11 +383,11 @@ class AppointmentManagementConsole {
 
       String? message = selectAppointment.value.updateDduration(newDuration);
       if (message != null) {
-        print("\n** $message **\n");
+        warning("\n** $message **\n");
         continue;
       }
 
-      print('\n** Duration updated successfully! **\n');
+      success('\n** Duration updated successfully! **\n');
       pressEnterToContinue(text: "Press enter to view updated information");
       break;
     } while (true);
@@ -461,7 +461,7 @@ class AppointmentManagementConsole {
       String? input = stdin.readLineSync();
 
       if (input == null || input.trim().isEmpty || input == '0') {
-        print("\n** Update cancelled. **\n");
+        warning("\n** Update cancelled. **\n");
         break;
       }
 
@@ -488,7 +488,7 @@ class AppointmentManagementConsole {
         continue;
       }
 
-      print('\n** Status updated successfully! **\n');
+      success('\n** Status updated successfully! **\n');
       pressEnterToContinue(text: "Press enter to view updated information");
       break;
     } while (true);
