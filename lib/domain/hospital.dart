@@ -21,6 +21,8 @@ class Hospital {
       UnmodifiableMapView(_appointments);
   Map<String, Patient> get patients => UnmodifiableMapView(_patients);
 
+  static get instance => null;
+
   // these functions are use to add all doctors from json to current object
   void addDoctors(Map<String, Doctor> doctors) {
     _doctors.addAll(doctors);
@@ -66,6 +68,10 @@ class Hospital {
 
   List<MapEntry<String, Nurse>> getNurseEntries() {
     return _nurses.entries.toList();
+  }
+
+  List<MapEntry<String, Appointment>> getAppointmentEntries() {
+    return _appointments.entries.toList();
   }
 
   // AI helps not fully generated
@@ -135,5 +141,21 @@ class Hospital {
       return "No assigned Doctor";
     }
     return 'Dr. ${doctor.name}';
+  }
+
+  List<Doctor> getAvailableDoctors(DateTime appointmentDateTime, int durationMinutes) {
+    List<Doctor> availableDoctors = [];
+
+    for (var doctor in _doctors.values) {
+      // Check doctor works at that time
+      if (!doctor.isWorkingAt(appointmentDateTime, durationMinutes)) continue;
+
+      // Check if doctor already booked
+      bool hasConflict = doctor.hasConflict(appointmentDateTime, durationMinutes);
+      if (!hasConflict) {
+        availableDoctors.add(doctor);
+      }
+    }
+    return availableDoctors;
   }
 }
