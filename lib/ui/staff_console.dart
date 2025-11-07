@@ -524,7 +524,7 @@ abstract class StaffConsole<T extends Staff> {
           break;
         } else if (choice == 'n') {
           if (T == Doctor) {
-            final newDoctor = Doctor(
+            final newDoctor = hospital.createDoctor(
               name: name,
               gender: gender,
               phoneNumber: phoneNumber,
@@ -532,8 +532,7 @@ abstract class StaffConsole<T extends Staff> {
               specialization: specialization,
               workingSchedule: workingSchedule,
             );
-            hospital.addDoctor(newDoctor);
-            success("\n** Doctor added successfully **\n");
+            success("\n** Doctor added successfully: ${newDoctor.name} **\n");
           } else if (T == Nurse) {
             final eligibleDoctors = hospital.getEligibleDoctorsForNurse(
               workingSchedule,
@@ -569,16 +568,14 @@ abstract class StaffConsole<T extends Staff> {
               }
             }
 
-            final newNurse = Nurse(
+            final newNurse = hospital.createNurse(
               name: name,
               gender: gender,
               phoneNumber: phoneNumber,
               email: email,
-              doctorId: assignedDoctorId,
               workingSchedule: workingSchedule,
+              doctorId: assignedDoctorId,
             );
-
-            hospital.addNurse(newNurse);
             if (assignedDoctorId != null) {
               success(
                 "\n** Nurse added successfully and linked to ${hospital.getDoctorName(assignedDoctorId)}. **\n",

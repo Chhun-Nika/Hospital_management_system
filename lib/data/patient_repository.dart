@@ -24,11 +24,11 @@ class PatientRepository {
       final patientId = pat['patientId'] as String;
       final gender = Gender.values.firstWhere((g) => g.name == pat['gender']);
 
-      final appointmentIds =
-          (pat['appointmentIds'] as List<dynamic>?)
-              ?.map((id) => id as String)
-              .toList() ??
-          [];
+      // final appointmentIds =
+      //     (pat['appointmentIds'] as List<dynamic>?)
+      //         ?.map((id) => id as String)
+      //         .toList() ??
+      //     [];
 
       patients[patientId] = Patient(
         patientId: patientId,
@@ -38,7 +38,7 @@ class PatientRepository {
         phoneNumber: pat['phoneNumber'],
         address: pat['address'],
         emergencyContact: pat['emergencyContact'],
-        appointmentIds: appointmentIds,
+        // appointmentIds: appointmentIds,
       );
     }
     return patients;
@@ -52,14 +52,14 @@ class PatientRepository {
 
     final data = patients.values.map((patient) {
       return {
-        "patientId": patient.patientId,
-        "fullName": patient.fullName,
-        "gender": patient.gender.name,
-        "dateOfBirth": patient.dateOfBirth.toIso8601String(),
-        "phoneNumber": patient.phoneNumber,
-        "address": patient.address,
-        "emergencyContact": patient.emergencyContact,
-        "appointmentIds": patient.appointmentIds,
+        'patientId': patient.patientId,
+        'fullName': patient.fullName,
+        'gender': patient.gender.name,
+        'dateOfBirth': patient.dateOfBirth.toIso8601String(),
+        'phoneNumber': patient.phoneNumber,
+        'address': patient.address,
+        'emergencyContact': patient.emergencyContact,
+        // "appointmentIds": patient.appointmentIds,
       };
     }).toList();
     final encoder = JsonEncoder.withIndent(' ');

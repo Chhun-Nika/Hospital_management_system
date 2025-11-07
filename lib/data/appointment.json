@@ -1,102 +1,112 @@
 [
-  {
-    "appointmentId": "apt-001",
-    "patientId": "p001",
-    "doctorId": "d001",
-    "appointmentDateTime": "2025-11-01 09:00:00",
-    "duration": 2,
-    "reason": "Cardiac check-up",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-002",
-    "patientId": "p002",
-    "doctorId": "d001",
-    "appointmentDateTime": "2025-11-02 10:00:00",
-    "duration": 2,
-    "reason": "Heart palpitation",
-    "appointmentStatus": "completed",
-    "doctorNotes": "Prescribed medication"
-  },
-  {
-    "appointmentId": "apt-003",
-    "patientId": "p003",
-    "doctorId": "d002",
-    "appointmentDateTime": "2025-11-03 11:30:00",
-    "duration": 1,
-    "reason": "Skin rash",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-004",
-    "patientId": "p004",
-    "doctorId": "d001",
-    "appointmentDateTime": "2025-11-04 09:00:00",
-    "duration": 2,
-    "reason": "Child fever",
-    "appointmentStatus": "completed",
-    "doctorNotes": "Recommended rest"
-  },
-  {
-    "appointmentId": "apt-005",
-    "patientId": "p005",
-    "doctorId": "d002",
-    "appointmentDateTime": "2025-11-05 11:00:00",
-    "duration": 1,
-    "reason": "Knee pain",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-006",
-    "patientId": "p006",
-    "doctorId": "d002",
-    "appointmentDateTime": "2025-11-06 14:30:00",
-    "duration": 2,
-    "reason": "Back pain",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-007",
-    "patientId": "p007",
-    "doctorId": "d001",
-    "appointmentDateTime": "2025-11-07 13:00:00",
-    "duration": 1,
-    "reason": "Child vaccination",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-008",
-    "patientId": "p008",
-    "doctorId": "d002",
-    "appointmentDateTime": "2025-11-08 15:00:00",
-    "duration": 2,
-    "reason": "Acne treatment",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-009",
-    "patientId": "p009",
-    "doctorId": "d001",
-    "appointmentDateTime": "2025-11-09 09:30:00",
-    "duration": 1,
-    "reason": "Neurology consultation",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  },
-  {
-    "appointmentId": "apt-010",
-    "patientId": "p010",
-    "doctorId": "d002",
-    "appointmentDateTime": "2025-11-10 10:00:00",
-    "duration": 2,
-    "reason": "Migraine headache",
-    "appointmentStatus": "scheduled",
-    "doctorNotes": null
-  }
+ {
+  "appointmentId": "apt-001",
+  "patientId": "p001",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-11-01 09:00:00",
+  "duration": 2,
+  "reason": "Cardiac check-up",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-002",
+  "patientId": "p002",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-11-02 10:00:00",
+  "duration": 2,
+  "reason": "Heart palpitation",
+  "appointmentStatus": "completed",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-003",
+  "patientId": "p003",
+  "doctorId": "d002",
+  "appointmentDateTime": "2025-11-03 11:30:00",
+  "duration": 1,
+  "reason": "Skin rash",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-004",
+  "patientId": "p004",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-11-04 09:00:00",
+  "duration": 2,
+  "reason": "Child fever",
+  "appointmentStatus": "completed",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-005",
+  "patientId": "p005",
+  "doctorId": "d002",
+  "appointmentDateTime": "2025-11-05 11:00:00",
+  "duration": 1,
+  "reason": "Knee pain",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-006",
+  "patientId": "p006",
+  "doctorId": "d002",
+  "appointmentDateTime": "2025-11-06 14:30:00",
+  "duration": 2,
+  "reason": "Back pain",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-007",
+  "patientId": "p007",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-11-07 13:00:00",
+  "duration": 1,
+  "reason": "Child vaccination",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-008",
+  "patientId": "p008",
+  "doctorId": "d002",
+  "appointmentDateTime": "2025-11-08 15:00:00",
+  "duration": 2,
+  "reason": "Acne treatment",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-009",
+  "patientId": "p009",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-11-09 09:30:00",
+  "duration": 1,
+  "reason": "Neurology consultation",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "apt-010",
+  "patientId": "p010",
+  "doctorId": "d002",
+  "appointmentDateTime": "2025-11-10 10:00:00",
+  "duration": 2,
+  "reason": "Migraine headache",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "a789bb64-51eb-43a8-9e0f-c6e0158bd194",
+  "patientId": "8bb8e304-9671-435d-acd7-8966b9bbae8d",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-12-12 00:00:00",
+  "duration": 3000,
+  "reason": "dfghjk",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ }
 ]

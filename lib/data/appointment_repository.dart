@@ -59,7 +59,7 @@ class AppointmentRepository {
       'appointmentDateTime': formatter.format(apptm.appointmentDateTime),
       'duration': apptm.duration,
       'reason' : apptm.reason,
-      'appointmentStatus': apptm.appointmentStatus,
+      'appointmentStatus': apptm.appointmentStatus.name,
       'doctorNotes': null
     }).toList();
 

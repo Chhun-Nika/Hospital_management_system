@@ -32,5 +32,7 @@ class HospitalRepository {
   void saveAll(Hospital hospital) {
     doctorRepo.writeAll(hospital.doctors);
     nurseRepo.writeAll(hospital.nurses);
+    patientRepo.writeAll(hospital.patients);
+    appointmentRepo.writeAll(hospital.appointments);
   }
 }

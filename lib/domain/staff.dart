@@ -6,8 +6,8 @@ var uuid = Uuid();
 
 abstract class Staff {
   final String _staffId;
-  String _name;
-  Gender _gender;
+  String name;
+  Gender gender;
   Role _role;
   String _phoneNumber;
   String _email;
@@ -15,15 +15,13 @@ abstract class Staff {
 
   Staff({
     String? staffId,
-    required String name,
-    required Gender gender,
+    required this.name,
+    required this.gender,
     required Role role,
     required String phoneNumber,
     required String email,
     required this.workingSchedule,
   }) : _staffId = staffId ?? uuid.v4(),
-  _name = name,
-  _gender = gender,
        _role = role,
        _phoneNumber = _validatePhoneNumber(phoneNumber),
        _email = _validateEmail(email);
@@ -32,8 +30,6 @@ abstract class Staff {
   Role get role => _role;
   String get phoneNumber => _phoneNumber;
   String get email => _email;
-  String get name => _name;
-  Gender get gender => _gender;
 
   // manage working schedule
   // turning map to list for easy display and access index since mostly user select by number not input the string
@@ -102,14 +98,14 @@ abstract class Staff {
 
   String? updateName(String newName) {
     // if (newName.trim().isEmpty) return "Name cannot be empty.";
-    if (newName == _name) return "New name is the same as current name.";
-    _name = newName;
+    if (newName == name) return "New name is the same as current name.";
+    name = newName;
     return null;
   }
 
   String? updateGender(Gender newGender) {
-    if (newGender == _gender) return "New gender is the same as current gender.";
-    _gender = newGender;
+    if (newGender == gender) return "New gender is the same as current gender.";
+    gender = newGender;
     return null;
   }
 

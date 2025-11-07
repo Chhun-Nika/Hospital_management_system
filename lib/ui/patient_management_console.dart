@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cli_table/cli_table.dart';
+import 'package:hospital_management_system/domain/appointment.dart';
+import 'package:hospital_management_system/domain/doctor.dart';
 import 'package:hospital_management_system/domain/enums.dart';
 import 'package:hospital_management_system/domain/hospital.dart';
 import 'package:hospital_management_system/domain/patient.dart';
@@ -32,7 +34,7 @@ class PatientConsole {
           clearScreen();
           print("-- Patients --");
           viewPatientAndAppointment();
-          pressEnterToContinue();
+          // pressEnterToContinue();
           break;
         case '2':
           clearScreen();
@@ -43,19 +45,20 @@ class PatientConsole {
           clearScreen();
           print("-- Update Patient --");
           updatePatient();
-          pressEnterToContinue();
+          // pressEnterToContinue();
           break;
         case '0':
           inSubmenu = false;
           break;
         default:
-          print("Invalid choice. Try again.");
+          warning("Invalid choice. Try again.");
           pressEnterToContinue();
       }
     } while (inSubmenu);
   }
 
   void viewPatient() {
+    print("-- Patients --\n");
     if (hospital.patients.isEmpty) {
       print('No Patients.');
     }
@@ -122,7 +125,7 @@ class PatientConsole {
     table.addAll(rows);
     print(table);
 
-    print("** Select patient by No to view their Appointment detail. **");
+    warning("** Select patient by No. to view their Appointment detail. **");
 
     do {
       String? input;
@@ -136,33 +139,85 @@ class PatientConsole {
 
       final noNumber = int.tryParse(input);
       if (noNumber == null || noNumber < 1 || noNumber > patients.length) {
-        print("\n** Invalid number. Please try again. **");
+        warning("\n** Invalid number. Please try again. **");
         continue;
       }
 
       final selectedPatient = patients[noNumber - 1].value;
 
-      if (selectedPatient.appointmentIds.isEmpty) {
-        print("\n ** This patient has no Appointment. **");
+      if (hospital
+          .getAppointmentByPatientId(selectedPatient.patientId)
+          .isEmpty) {
+        warning("\n ** This patient has no Appointment. **");
         pressEnterToContinue();
         clearScreen();
         print(table);
         continue;
       }
 
-      viewAppointment(selectedPatient.appointmentIds);
+      viewAppointment(
+        hospital.getAppointmentByPatientId(selectedPatient.patientId),
+        selectedPatient,
+      );
       pressEnterToContinue();
       clearScreen();
+      print("-- Patients --\n");
       print(table);
     } while (true);
   }
 
-  void viewAppointment(List<String> appointmentId) {
+  // void viewAppointment(List<Appointment> appointmentId) {
+  //   print("\n-- View Appointment Detail --\n");
+  //   final headers = [
+  //     'No',
+  //     'AppointmeatID',
+  //     'DoctorId',
+  //     'AppointmentDateTime',
+  //     'Duration',
+  //     'Reason',
+  //     'Status',
+  //     'DoctorNote',
+  //   ];
+
+  //   final List<List<dynamic>> rows = [];
+  //   int number = 1;
+
+  //   for (var appointmentId in appointmentId) {
+  //     var app = hospital.appointments[appointmentId];
+  //     if (app != null) {
+  //       rows.add([
+  //         number,
+  //         app.appointmentId,
+  //         app.doctorId,
+  //         app.appointmentDateTime.toLocal().toString().split('.')[0],
+  //         '${app.duration} hours',
+  //         app.reason,
+  //         app.appointmentStatus.name,
+  //         app.doctorNotes ?? 'null',
+  //       ]);
+  //       number++;
+  //     }
+  //   }
+
+  //   if (rows.isEmpty) {
+  //     warning("\n** No valid appointments found for this patient. **");
+  //     return;
+  //   }
+
+  //   final table = Table(header: headers);
+  //   table.addAll(rows);
+  //   print(table);
+  // }
+  void viewAppointment(
+    List<Appointment> appointments,
+    Patient selectedPatient,
+  ) {
     print("\n-- View Appointment Detail --\n");
+    print("Patient: ${selectedPatient.fullName}");
+
     final headers = [
       'No',
-      'AppointmeatID',
-      'DoctorId',
+      'DoctorID',
       'AppointmentDateTime',
       'Duration',
       'Reason',
@@ -173,25 +228,21 @@ class PatientConsole {
     final List<List<dynamic>> rows = [];
     int number = 1;
 
-    for (var appointmentId in appointmentId) {
-      var app = hospital.appointments[appointmentId];
-      if (app != null) {
-        rows.add([
-          number,
-          app.appointmentId,
-          app.doctorId,
-          app.appointmentDateTime.toLocal().toString().split('.')[0],
-          '${app.duration} hours',
-          app.reason,
-          app.appointmentStatus.name,
-          app.doctorNotes ?? 'null',
-        ]);
-        number++;
-      }
+    for (var app in appointments) {
+      rows.add([
+        number,
+        hospital.getDoctorName(app.doctorId),
+        app.appointmentDateTime.toLocal().toString().split('.')[0],
+        '${app.duration} hours',
+        app.reason,
+        app.appointmentStatus.name,
+        app.doctorNotes ?? 'null',
+      ]);
+      number++;
     }
 
     if (rows.isEmpty) {
-      print("\n** No valid appointments found for this patient. **");
+      warning("\n** No appointments found for this patient. **");
       return;
     }
 
@@ -201,6 +252,7 @@ class PatientConsole {
   }
 
   void updatePatient() {
+    clearScreen();
     final List<MapEntry<String, Patient>> patientList = hospital
         .getPatientEntries();
 
@@ -225,12 +277,14 @@ class PatientConsole {
             clearScreen();
             patientDetailDisplay(patientList, parseInput);
           } else {
-            print(
+            warning(
               '\n** Please enter a valid input (refer to table No. for input range) **\n',
             );
           }
         } catch (e) {
-          print('\n** Invalid input. Please enter a number or q to quit. **\n');
+          warning(
+            '\n** Invalid input. Please enter a number or q to quit. **\n',
+          );
         }
       }
     } while (true);
@@ -303,13 +357,14 @@ class PatientConsole {
           stillUpdate = false;
           break;
         default:
-          print("Invalid choice. Try again.");
+          warning("Invalid choice. Try again.");
           pressEnterToContinue(text: "Press enter to input again.");
       }
     } while (stillUpdate);
   }
 
   void updateName(MapEntry<String, Patient> selectedPatient) {
+    clearScreen();
     print("\n-- Update Name --\n");
     print("** Current name: ${selectedPatient.value.fullName}");
 
@@ -319,104 +374,134 @@ class PatientConsole {
 
       if (input.trim().isEmpty) {
         print("\n** Input can't be empty. **\n");
-      } else {
-        if (input == selectedPatient.value.fullName) {
-          print("\n** New input name is the same as the current name. **\n");
-        } else {
-          selectedPatient.value.fullName = input;
-          print('\n** Name is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        continue;
       }
+
+      String? message = selectedPatient.value.updateName(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Name is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   // update gender
   void updateGender(MapEntry<String, Patient> selectedPatient) {
+    clearScreen();
     print("\n-- Update Gender --\n");
     print("** Current gender: ${selectedPatient.value.gender.name}");
-    // display gender
-    print("Available Genders:");
-    print("  - Female");
-    print("  - Male");
-    print("  - Other");
-
     do {
-      stdout.write('\nEnter new gender (can be lower case): ');
+      stdout.write('\nEnter new gender (male, female, other): ');
       String input = stdin.readLineSync() ?? '';
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input.toLowerCase() == selectedPatient.value.gender.name) {
-          print(
-            "\n** New input gender is the same as the current gender. **\n",
-          );
-        } else {
-          late Gender newGender;
-          switch (input.toLowerCase()) {
-            case 'female':
-              newGender = Gender.female;
-              break;
-            case 'male':
-              newGender = Gender.male;
-              break;
-            case 'other':
-              newGender = Gender.other;
-              break;
-            default:
-              print('Invalid input.');
-              continue;
-          }
-          selectedPatient.value.gender = newGender;
-          print('\n** Gender is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      Gender? newGender;
+      switch (input.toLowerCase()) {
+        case 'female':
+          newGender = Gender.female;
+          break;
+        case 'male':
+          newGender = Gender.male;
+          break;
+        case 'other':
+          newGender = Gender.other;
+          break;
+        default:
+          warning('Invalid input. Try again');
+          continue;
+      }
+      String? message = selectedPatient.value.updateGender(newGender);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Gender is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
+  // void updateDateOfBirth(MapEntry<String, Patient> selectedPatient) {
+  //   print('\n -- Update Date Of Birth --\n');
+  //   print(
+  //     "** current date of birth: ${selectedPatient.value.dateOfBirth.toLocal().toString().split(' ')[0]}",
+  //   );
+  //   do {
+  //     stdout.write("\nEnter new date of birth(YYYY-MM-DD): ");
+  //     String input = stdin.readLineSync() ?? '';
+
+  //     if (input.trim().isEmpty) {
+  //       print("\n** Input can't be empty. **\n");
+  //       continue;
+  //     }
+
+  //     try {
+  //       // Try to parse input into a DateTime
+  //       DateTime parsedDate = DateTime.tryparse(input);
+
+  //       // Optional: ensure date is in the past
+  //       if (parsedDate.isAfter(DateTime.now())) {
+  //         print("\n** Date of Birth cannot be in the future. **\n");
+  //         continue;
+  //       }
+  //       if (parsedDate == selectedPatient.value.dateOfBirth) {
+  //         print("\n** New date is the same as current one. **\n");
+  //         continue;
+  //       }
+
+  //       // Update the patient's date of birth
+  //       selectedPatient.value.dateOfBirth = parsedDate;
+  //       print('\n** Date of Birth updated successfully! **\n');
+  //       pressEnterToContinue(text: "Press enter to view updated information");
+  //       break;
+  //     } catch (e) {
+  //       print("\n** Invalid date format. Please use YYYY-MM-DD. **\n");
+  //     }
+  //   } while (true);
+  // }
   void updateDateOfBirth(MapEntry<String, Patient> selectedPatient) {
+    clearScreen();
     print('\n -- Update Date Of Birth --\n');
     print(
-      "** current date of birth: ${selectedPatient.value.dateOfBirth.toLocal().toString().split(' ')[0]}",
+      "** Current date of birth: ${selectedPatient.value.dateOfBirth.toLocal().toString().split(' ')[0]}",
     );
-    do {
-      stdout.write("\nEnter new date of birth: ");
-      String input = stdin.readLineSync() ?? '';
 
-      if (input.trim().isEmpty) {
+    do {
+      stdout.write("\nEnter new date of birth (YYYY-MM-DD): ");
+      String input = stdin.readLineSync()?.trim() ?? '';
+
+      if (input.isEmpty) {
         print("\n** Input can't be empty. **\n");
         continue;
       }
 
-      try {
-        // Try to parse input into a DateTime
-        DateTime parsedDate = DateTime.parse(input);
+      DateTime? parsedDate = DateTime.tryParse(input);
 
-        // Optional: ensure date is in the past
-        if (parsedDate.isAfter(DateTime.now())) {
-          print("\n** Date of Birth cannot be in the future. **\n");
-          continue;
-        }
-        if (parsedDate == selectedPatient.value.dateOfBirth) {
-          print("\n** New date is the same as current one. **\n");
-          continue;
-        }
-
-        // Update the patient's date of birth
-        selectedPatient.value.dateOfBirth = parsedDate;
-        print('\n** Date of Birth updated successfully! **\n');
-        pressEnterToContinue(text: "Press enter to view updated information");
-        break;
-      } catch (e) {
-        print("\n** Invalid date format. Please use YYYY-MM-DD. **\n");
+      if (parsedDate == null) {
+        warning("\n** Invalid date format. Please use YYYY-MM-DD. **\n");
+        continue;
       }
+
+      String? message = selectedPatient.value.updateDateOfBirth(parsedDate);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+
+      // Update the patient's date of birth
+      success('\n** Date of Birth updated successfully! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   void updateAddress(MapEntry<String, Patient> selectedPatient) {
+    clearScreen();
     print("\n-- Update Address --\n");
     print("** Current Email: ${selectedPatient.value.address}");
 
@@ -425,21 +510,22 @@ class PatientConsole {
       String input = stdin.readLineSync() ?? '';
 
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input == selectedPatient.value.address) {
-          print("\n** New input address is the same as the current name. **\n");
-        } else {
-          selectedPatient.value.address = input;
-          print('\n** Address is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      String? message = selectedPatient.value.updateAddress(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Address is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   void updatePhoneNumber(MapEntry<String, Patient> selectedPatient) {
+    clearScreen();
     print("\n-- Update Phone Number --\n");
     print("** Current Email: ${selectedPatient.value.phoneNumber}");
 
@@ -448,26 +534,22 @@ class PatientConsole {
       String input = stdin.readLineSync() ?? '';
 
       if (input.trim().isEmpty) {
-        print("\n** Input can't be empty. **\n");
-      } else {
-        if (input.length < 9) {
-          print("\n** The length of phone number must be at least 9 **\n");
-          continue;
-        } else if (input == selectedPatient.value.phoneNumber) {
-          print(
-            "\n** New input Phone number is the same as the current Phone number. **\n",
-          );
-        } else {
-          selectedPatient.value.phoneNumber = input;
-          print('\n** Phone Number is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        warning("\n** Input can't be empty. **\n");
+        continue;
       }
+      String? message = selectedPatient.value.updatePhoneNumber(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Phone number is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
   }
 
   void updateEmergencyContact(MapEntry<String, Patient> selectedPatient) {
+    clearScreen();
     print("\n-- Update Emergency Contact --\n");
     print("** Current Email: ${selectedPatient.value.emergencyContact}");
 
@@ -477,34 +559,22 @@ class PatientConsole {
 
       if (input.trim().isEmpty) {
         print("\n** Input can't be empty. **\n");
-      } else {
-        if (input.length < 9) {
-          print("\n** The length of emergency contact must be at least 9 **\n");
-          continue;
-        } else if (input == selectedPatient.value.emergencyContact) {
-          print(
-            "\n** New input Emergency Contact is the same as the current Phone number. **\n",
-          );
-        } else {
-          selectedPatient.value.emergencyContact = input;
-          print('\n** Emergency Contact is updated! **\n');
-          pressEnterToContinue(text: "Press enter to view updated information");
-          break;
-        }
+        continue;
       }
+      String? message = selectedPatient.value.updateEmergencyContact(input);
+      if (message != null) {
+        warning("\n** $message **\n");
+        continue;
+      }
+      success('\n** Emergency Contact is updated! **\n');
+      pressEnterToContinue(text: "Press enter to view updated information");
+      break;
     } while (true);
-  }
-
-  // AI-generated : fucntion warning message
-  void warning(String message) {
-    // ANSI escape code for yellow text
-    const yellow = '\x1B[33m';
-    const reset = '\x1B[0m';
-    print('\n$yellow WARNING: $message$reset');
   }
 
   void createPatientWithAppointment() {
     warning("All information must be filled in order to create new Patient.\n");
+
     String name;
     Gender gender;
     DateTime dateOfBirth;
@@ -512,90 +582,154 @@ class PatientConsole {
     String address;
     String emergencyContact;
 
+    // Name
     while (true) {
       stdout.write('- Name: ');
       String inputName = stdin.readLineSync() ?? '';
       if (inputName.trim().isEmpty) {
-        warning("\n** Name Cannot be Empty **\n");
+        warning("** Name cannot be empty. **\n");
       } else {
-        name = inputName;
+        name = inputName.trim();
         break;
       }
     }
 
+    // Gender
     while (true) {
-      stdout.write('- Gender (male or female): ');
-      String inputGender = stdin.readLineSync() ?? '';
+      stdout.write('- Gender (male, female, other): ');
+      String inputGender = (stdin.readLineSync() ?? '').trim().toLowerCase();
       if (inputGender == 'male') {
         gender = Gender.male;
         break;
       } else if (inputGender == 'female') {
         gender = Gender.female;
         break;
-      } else {
-        warning("\n** Please enter either 'male' or 'female' **\n");
-      }
-    }
-
-    while (true) {
-      stdout.write('- Date Of Birth (yyyy-mm-dd): ');
-      String inputDob = stdin.readLineSync() ?? '';
-      try {
-        dateOfBirth = DateTime.parse(inputDob);
+      } else if (inputGender == 'other') {
+        gender = Gender.other;
         break;
-      } catch (e) {
-        print("Invalid date format, try again.");
+      } else {
+        warning("** Invalid gender. Enter 'male', 'female', or 'other'. **\n");
       }
     }
 
+    // Date of Birth
+    // while (true) {
+    //   stdout.write('- Date of Birth (yyyy-mm-dd): ');
+    //   String inputDob = stdin.readLineSync() ?? '';
+    //   try {
+    //     dateOfBirth = DateTime.parse(inputDob);
+    //     if (dateOfBirth.isAfter(DateTime.now())) {
+    //       warning("** Date of birth cannot be in the future. **\n");
+    //     } else {
+    //       break;
+    //     }
+    //   } catch (e) {
+    //     warning("** Invalid date format. Please use yyyy-mm-dd. **\n");
+    //   }
+    // }
+    while (true) {
+      stdout.write('- Date of Birth (yyyy-mm-dd): ');
+      String inputDob = stdin.readLineSync()?.trim() ?? '';
+
+      if (inputDob.isEmpty) {
+        warning("** Date of birth cannot be empty. **\n");
+        continue;
+      }
+
+      // Split manually to normalize format
+      final parts = inputDob.split('-');
+      if (parts.length != 3) {
+        warning(
+          "** Invalid date format. Please use yyyy-mm-dd (e.g., 2005-11-06). **\n",
+        );
+        continue;
+      }
+
+      String yearStr = parts[0];
+      String monthStr = parts[1].padLeft(2, '0');
+      String dayStr = parts[2].padLeft(2, '0');
+      final normalized = '$yearStr-$monthStr-$dayStr';
+
+      try {
+        dateOfBirth = DateTime.parse(normalized);
+
+        final today = DateTime.now();
+        final todayOnly = DateTime(today.year, today.month, today.day);
+        final dobOnly = DateTime(
+          dateOfBirth.year,
+          dateOfBirth.month,
+          dateOfBirth.day,
+        );
+
+        if (!dobOnly.isBefore(todayOnly)) {
+          warning(
+            "** Date of birth must be in the past (not today or future). **\n",
+          );
+          continue;
+        }
+
+        break; // valid
+      } catch (e) {
+        warning("** Invalid date. Please enter a valid date. **\n");
+      }
+    }
+
+    //Phone Number
     while (true) {
       stdout.write('- Phone Number: ');
       String inputPhone = stdin.readLineSync() ?? '';
       if (inputPhone.trim().isEmpty) {
-        warning("\n** Name Cannot be Empty **\n");
+        warning("** Phone number cannot be empty. **\n");
+      } else if (inputPhone.length < 9) {
+        warning("** Invalid phone number. Must be at least 9 digits. **\n");
       } else {
-        phoneNumber = inputPhone;
+        phoneNumber = inputPhone.trim();
         break;
       }
     }
 
+    // Address
     while (true) {
       stdout.write('- Address: ');
       String inputAddress = stdin.readLineSync() ?? '';
       if (inputAddress.trim().isEmpty) {
-        warning("\n** Name Cannot be Empty **\n");
+        warning("** Address cannot be empty. **\n");
       } else {
-        address = inputAddress;
+        address = inputAddress.trim();
         break;
       }
     }
 
+    // Emergency Contact
     while (true) {
       stdout.write('- Emergency Contact: ');
       String inputEmer = stdin.readLineSync() ?? '';
       if (inputEmer.trim().isEmpty) {
-        warning("\n** Name Cannot be Empty **\n");
+        warning("** Emergency contact cannot be empty. **\n");
+      } else if (inputEmer.length < 9) {
+        warning(
+          "** Invalid emergency contact. Must be at least 9 digits. **\n",
+        );
       } else {
-        emergencyContact = inputEmer;
+        emergencyContact = inputEmer.trim();
         break;
       }
     }
 
-    Patient newPatient = Patient(
-      fullName: name,
+    // Create Patient
+    final newPatient = hospital.createPatient(
+      name: name,
       gender: gender,
-      dateOfBirth: dateOfBirth,
       phoneNumber: phoneNumber,
-      address: address,
+      dateOfBirth: dateOfBirth,
       emergencyContact: emergencyContact,
-      appointmentIds: [],
+      address: address,
     );
-    hospital.addPatient(newPatient);
 
     clearScreen();
-    // create their appointment
     print("\n** Create ${newPatient.fullName}'s Appointment **\n");
+
+    // Create appointment if console is available
     appointmentConsole?.createAppointment(newPatient.patientId);
-  
   }
 }

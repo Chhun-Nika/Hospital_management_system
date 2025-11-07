@@ -5,7 +5,7 @@ import 'package:hospital_management_system/domain/time_slot.dart';
 
 class Doctor extends Staff {
   String _specialization;
-  final List<String> _appointmentIds;
+  // final List<String> _appointmentIds;
   // store the time or slots that has been booked - avoid overlapping appointment dateTime
   final Map<DateTime, List<TimeSlot>> _bookedSlots;
 
@@ -21,7 +21,7 @@ class Doctor extends Staff {
     Map<DateTime, List<TimeSlot>>? bookedSlots,
   }) : _specialization = specialization,
        _bookedSlots = bookedSlots ?? {},
-       _appointmentIds = [],
+      //  _appointmentIds = [],
        super(staffId: id, role: Role.doctor);
 
   String get specialization => _specialization;
@@ -30,7 +30,7 @@ class Doctor extends Staff {
     return DateTime(dateTime.year, dateTime.month, dateTime.day);
   }
 
-  List<String> get appointmentIds => _appointmentIds;
+  // List<String> get appointmentIds => _appointmentIds;
 
   Map<DateTime, List<TimeSlot>> get bookedSlots => _bookedSlots;
 
