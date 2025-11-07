@@ -127,6 +127,7 @@ class AppointmentManagementConsole {
     late int duration;
     late String reason;
     late String doctorNote;
+    int? inputDuration;
 
     List<Doctor> availableDoctors = [];
 
@@ -151,11 +152,10 @@ class AppointmentManagementConsole {
           warning("Invalid date format, try again.");
         }
       }
-
       while (true) {
         stdout.write('- Duration in hours: ');
         final input = stdin.readLineSync()?.trim() ?? '';
-        final inputDuration = int.tryParse(input);
+        inputDuration = int.tryParse(input);
         if (inputDuration == null || inputDuration <= 0) {
           warning("\n** Duration cannot be negative or zero **\n");
           continue;
@@ -217,7 +217,7 @@ class AppointmentManagementConsole {
       patientId: patientId,
       doctorId: doctorId,
       appointmentDateTime: appointmentDateTime,
-      duration: duration,
+      duration: inputDuration!,
       reason: reason,
       status: AppointmentStatus.scheduled,
       doctorNotes: doctorNote,
