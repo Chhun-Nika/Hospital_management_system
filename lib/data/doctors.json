@@ -7,7 +7,6 @@
   "phoneNumber": "0123456789",
   "email": "sokdara@hospital.com",
   "specialization": "Cardiology",
-  "appointmentIds": [],
   "workingSchedule": {
    "monday": [
     {
@@ -49,7 +48,6 @@
   "phoneNumber": "011223344",
   "email": "chanborey@hospital.com",
   "specialization": "Dermatology",
-  "appointmentIds": [],
   "workingSchedule": {
    "tuesday": [
     {

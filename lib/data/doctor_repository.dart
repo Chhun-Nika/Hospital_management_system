@@ -135,7 +135,7 @@ class DoctorRepository {
         'phoneNumber': doctor.phoneNumber,
         'email': doctor.email,
         'specialization': doctor.specialization,
-        'appointmentIds': doctor.appointmentIds,
+        // 'appointmentIds': doctor.appointmentIds,
         'workingSchedule': workingScheduleToJson,
         'bookedSlots': bookedSlotToJson,
       };

@@ -39,20 +39,91 @@ class Hospital {
   }
 
   // these functions are use to add single staff in creating staff mode
-  void addNurse(Nurse nurse) {
-    _nurses[nurse.staffId] = nurse;
-  }
-
-  void addDoctor(Doctor doctor) {
-    _doctors[doctor.staffId] = doctor;
-  }
-
-  void addPatient(Patient patient) {
-    _patients[patient.patientId] = patient;
-  }
 
   void addAppointment(Appointment appointment) {
     _appointments[appointment.appointmentId] = appointment;
+  }
+
+  Doctor createDoctor({
+    required String name,
+    required Gender gender,
+    required String phoneNumber,
+    required String email,
+    required String specialization,
+    Map<DayOfWeek, List<TimeSlot>>? workingSchedule,
+  }) {
+    final doctor = Doctor(
+      name: name,
+      gender: gender,
+      phoneNumber: phoneNumber,
+      email: email,
+      specialization: specialization,
+      workingSchedule: workingSchedule ?? {},
+    );
+    _doctors[doctor.staffId] = doctor;
+    return doctor;
+  }
+
+  Nurse createNurse({
+    required String name,
+    required Gender gender,
+    required String phoneNumber,
+    required String email,
+    String? doctorId,
+    required Map<DayOfWeek, List<TimeSlot>> workingSchedule,
+  }) {
+    final nurse = Nurse(
+      name: name,
+      gender: gender,
+      phoneNumber: phoneNumber,
+      email: email,
+      doctorId: doctorId,
+      workingSchedule: workingSchedule,
+    );
+    _nurses[nurse.staffId] = nurse;
+    return nurse;
+  }
+
+  Patient createPatient({
+    required String name,
+    required Gender gender,
+    required String phoneNumber,
+    required DateTime dateOfBirth,
+    required String emergencyContact,
+    required String address
+  }) {
+    final patient = Patient(
+      fullName: name,
+      gender: gender,
+      phoneNumber: phoneNumber,
+      dateOfBirth: dateOfBirth,
+      emergencyContact: emergencyContact,
+      address: address
+    );
+    _patients[patient.patientId] = patient;
+    return patient;
+  }
+
+  Appointment createAppointment({
+    required String patientId,
+    required String doctorId,
+    required DateTime appointmentDateTime,
+    required int duration,
+    required String reason,
+    AppointmentStatus status = AppointmentStatus.scheduled,
+    String? doctorNotes,
+  }) {
+    final appointment = Appointment(
+      patientId: patientId,
+      doctorId: doctorId,
+      dateTime: appointmentDateTime,
+      duration: duration,
+      reasons: reason,
+      appointmentStatus: status,
+      doctorNotes: doctorNotes,
+    );
+    _appointments[appointment.appointmentId] = appointment;
+    return appointment;
   }
 
   // for accessing and selecting each doctors via number instead of id
@@ -136,4 +207,14 @@ class Hospital {
     }
     return 'Dr. ${doctor.name}';
   }
+
+  // get list of appointment by patient id
+  List<Appointment> getAppointmentByPatientId(String patientId) {
+    final List<Appointment> appointments = _appointments.values
+        .where((appt) => appt.patientId == patientId)
+        .toList();
+    return appointments;
+  }
+
+
 }

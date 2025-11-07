@@ -118,94 +118,116 @@ class AppointmentManagementConsole {
   }
 
   void createAppointment(String patientId) {
-    warning("All information must be filled in order to create Appointment.\n");
-    late String doctorId;
-    DateTime appointmentDateTime;
-    int duration;
-    String reason;
-    String doctorNote;
+  warning("All information must be filled in order to create Appointment.\n");
+  late String doctorId;
+  late DateTime appointmentDateTime;
+  late int duration;
+  late String reason;
+  late String doctorNote;
 
-    // display all existing doctor
-    doctorConsole?.viewStaff();
-    print("\n** Select Doctor for Appointment by No. **\n");
-    do {
-      stdout.write('- Doctor No: ');
-      String selectedDoctor = stdin.readLineSync() ?? '';
-      if (selectedDoctor.trim().isEmpty ||
-          selectedDoctor.toLowerCase() == 'q') {
-        print("** Invalid **\n");
-        return;
-      }
+  // Display all existing doctors
+  doctorConsole?.viewStaff();
+  print("\n** Select Doctor for Appointment by No. **\n");
 
-      final doctorEntries = hospital.getDoctorEntries();
+  // Select doctor
+  do {
+    stdout.write('- Doctor No: ');
+    String selectedDoctor = stdin.readLineSync()?.trim() ?? '';
+    if (selectedDoctor.isEmpty || selectedDoctor.toLowerCase() == 'q') {
+      print("** Invalid **\n");
+      return;
+    }
 
-      final index = int.tryParse(selectedDoctor);
-      if (index == null || index < 1 || index > doctorEntries.length) {
-        print("** Invalid number. Try again. **\n");
+    final doctorEntries = hospital.getDoctorEntries();
+    final index = int.tryParse(selectedDoctor);
+    if (index == null || index < 1 || index > doctorEntries.length) {
+      print("** Invalid number. Try again. **\n");
+      continue;
+    }
+
+    doctorId = doctorEntries[index - 1].key;
+    break;
+  } while (true);
+
+  // DateTime input
+  while (true) {
+    stdout.write('- DateTime (yyyy-mm-dd HH:MM): ');
+    final inputDate = stdin.readLineSync()?.trim();
+    if (inputDate == null || inputDate.isEmpty) {
+      print("** Input cannot be empty. **\n");
+      continue;
+    }
+
+    try {
+      // Normalize input to ISO format
+      appointmentDateTime = DateTime.parse(inputDate.replaceAll(' ', 'T'));
+
+      final now = DateTime.now();
+      final tomorrow = DateTime(now.year, now.month, now.day).add(Duration(days: 1));
+
+      if (!appointmentDateTime.isAfter(tomorrow.subtract(const Duration(seconds: 1)))) {
+        print("** Appointment must be scheduled from tomorrow onwards. **\n");
         continue;
       }
-      doctorId = doctorEntries[index - 1].key;
-      break;
-    } while (true);
 
-    while (true) {
-      stdout.write('- DateTime (yyyy-mm-dd HH:MM): ');
-      final inputDate = stdin.readLineSync()?.trim();
-      try {
-        if (inputDate == null || inputDate.isEmpty) throw FormatException();
-        appointmentDateTime = DateTime.parse(inputDate.replaceAll(' ', 'T'));
-        break;
-      } catch (e) {
-        print("Invalid date format, try again.");
-      }
+      break; // valid
+    } catch (e) {
+      print("** Invalid date format. Use yyyy-mm-dd HH:MM **\n");
     }
-
-    while (true) {
-      stdout.write('- Duration in hours: ');
-      int inputDuration = stdin.readByteSync();
-      if (inputDuration.isNegative) {
-        warning("\n** Duration Cannot be Negative **\n");
-      } else {
-        duration = inputDuration * 60;
-        break;
-      }
-    }
-
-    while (true) {
-      stdout.write('- Reason: ');
-      String inputReason = stdin.readLineSync() ?? '';
-      if (inputReason.trim().isEmpty) {
-        warning("\n** Reason Cannot be Empty **\n");
-      } else {
-        reason = inputReason.trim();
-        break;
-      }
-    }
-
-    while (true) {
-      stdout.write('- Doctor Notes: ');
-      String inputNote = stdin.readLineSync() ?? '';
-      if (inputNote.trim().isEmpty) {
-        warning("\n** Name Cannot be Empty **");
-      } else {
-        doctorNote = inputNote;
-        break;
-      }
-    }
-
-    final appointment = Appointment(
-      patientId: patientId,
-      doctorId: doctorId,
-      dateTime: appointmentDateTime,
-      duration: duration,
-      reasons: reason,
-      appointmentStatus: AppointmentStatus.scheduled,
-      doctorNotes: doctorNote,
-    );
-    hospital.addAppointment(appointment);
-    print("\n** Create Sucessfully **");
-    pressEnterToContinue();
   }
+
+  // Duration input
+  while (true) {
+    stdout.write('- Duration in hours: ');
+    String? input = stdin.readLineSync()?.trim();
+    int? inputDuration = int.tryParse(input ?? '');
+    if (inputDuration == null || inputDuration <= 0) {
+      warning("** Duration must be a positive integer **\n");
+      continue;
+    }
+    duration = inputDuration * 60;
+    break;
+  }
+
+  // Reason
+  while (true) {
+    stdout.write('- Reason: ');
+    String inputReason = stdin.readLineSync()?.trim() ?? '';
+    if (inputReason.isEmpty) {
+      warning("** Reason cannot be empty **\n");
+      continue;
+    }
+    reason = inputReason;
+    break;
+  }
+
+  // Doctor Notes
+  while (true) {
+    stdout.write('- Doctor Notes: ');
+    String inputNote = stdin.readLineSync()?.trim() ?? '';
+    if (inputNote.isEmpty) {
+      warning("** Doctor Notes cannot be empty **\n");
+      continue;
+    }
+    doctorNote = inputNote;
+    break;
+  }
+
+  // Create appointment
+  final appointment = Appointment(
+    patientId: patientId,
+    doctorId: doctorId,
+    dateTime: appointmentDateTime,
+    duration: duration,
+    reasons: reason,
+    appointmentStatus: AppointmentStatus.scheduled,
+    doctorNotes: doctorNote,
+  );
+
+  hospital.addAppointment(appointment);
+  print("\n** Appointment Created Successfully **");
+  pressEnterToContinue();
+}
 
   void createAppointmentSelectPatient() {
     patientConsole?.viewPatient();

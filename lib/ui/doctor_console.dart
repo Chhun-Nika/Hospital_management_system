@@ -87,6 +87,7 @@ class DoctorConsole extends StaffConsole<Doctor> {
   }
 
   void updateDoctor() {
+    clearScreen();
     // viewDoctors();
     final List<MapEntry<String, Doctor>> doctorList = hospital
         .getDoctorEntries();
