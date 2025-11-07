@@ -52,6 +52,7 @@ class AppointmentRepository {
     }
     final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
 
+
     final data = appointment.values.map((apptm) => {
       'appointmentId': apptm.appointmentId,
       'patientId': apptm.patientId,
