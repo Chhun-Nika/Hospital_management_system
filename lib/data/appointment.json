@@ -108,5 +108,35 @@
   "reason": "dfghjk",
   "appointmentStatus": "scheduled",
   "doctorNotes": null
+ },
+ {
+  "appointmentId": "a94868d4-0fb6-4377-8137-361d04e11086",
+  "patientId": "p001",
+  "doctorId": "d001",
+  "appointmentDateTime": "2026-10-30 08:00:00",
+  "duration": 120,
+  "reason": "headach",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "5a3da1ea-6f74-425f-bffe-ac751c3eda1f",
+  "patientId": "p001",
+  "doctorId": "d001",
+  "appointmentDateTime": "2025-11-07 08:00:00",
+  "duration": 120,
+  "reason": "check mentalheath",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
+ },
+ {
+  "appointmentId": "8638808c-b89e-4528-9c25-6278d6d1981b",
+  "patientId": "p001",
+  "doctorId": "d002",
+  "appointmentDateTime": "2025-11-11 08:00:00",
+  "duration": 60,
+  "reason": "check up",
+  "appointmentStatus": "scheduled",
+  "doctorNotes": null
  }
 ]

@@ -58,7 +58,7 @@ class PatientConsole {
   }
 
   void viewPatient() {
-    print("-- Patients --\n");
+    print("\n** Patients **\n");
     if (hospital.patients.isEmpty) {
       print('No Patients.');
     }

@@ -31,7 +31,7 @@ class Appointment {
        _reason = reasons,
        // every new appoinment that is created will set to 'schedule'
        _appointmentStatus = appointmentStatus ?? AppointmentStatus.scheduled,
-       _doctorNotes = doctorNotes;
+       _doctorNotes = (doctorNotes == null || doctorNotes.isEmpty) ? null : doctorNotes;
 
   String get appointmentId => _appointmentId;
   String get patientId => _patientId;
@@ -41,7 +41,6 @@ class Appointment {
   String? get reason => _reason;
   AppointmentStatus get appointmentStatus => _appointmentStatus;
   String? get doctorNotes => _doctorNotes;
-  
 
   String? updateReason(String newReason) {
     if (newReason == _reason) {
@@ -79,7 +78,8 @@ class Appointment {
     if (appointmentStatus != AppointmentStatus.cancel &&
         newStatus == AppointmentStatus.cancel) {
       // Find the doctor in hospital's _doctors map
-      final doctor = hospital.doctors[doctorId]; // or hospital.getAllDoctors()[doctorId] if it's a map
+      final doctor = hospital
+          .doctors[doctorId]; // or hospital.getAllDoctors()[doctorId] if it's a map
       if (doctor != null) {
         doctor.removeBookedSlot(appointmentDateTime, duration);
       }
@@ -88,8 +88,4 @@ class Appointment {
     _appointmentStatus = newStatus;
     return null; // status updated successfully
   }
-
-
-
-
 }

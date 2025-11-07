@@ -66,35 +66,34 @@ class Doctor extends Staff {
   //     });
   //  }
   bool isWorkingAt(DateTime appointmentDateTime, int durationMinutes) {
+
     final day = DayOfWeek.values[appointmentDateTime.weekday - 1];
     final slots = workingSchedule[day];
-    if (slots == null) return false;
+
+    if (slots == null || slots.isEmpty) return false;
 
     final appointmentStart = TimeOfDay(
       hour: appointmentDateTime.hour,
       minute: appointmentDateTime.minute,
     );
-    final appointmentEndTime = appointmentDateTime.add(
-      Duration(minutes: durationMinutes),
-    );
+
+    final appointmentEndDateTime = appointmentDateTime.add(Duration(minutes: durationMinutes));
     final appointmentEnd = TimeOfDay(
-      hour: appointmentEndTime.hour,
-      minute: appointmentEndTime.minute,
+      hour: appointmentEndDateTime.hour,
+      minute: appointmentEndDateTime.minute,
     );
 
-    // return slots.any(
-    //   (slot) =>
-    //       appointmentStart.isAfter(slot.startTime) &&
-    //       appointmentEnd.isBefore(slot.endTime),
-    // );
     return slots.any((slot) {
-    // start >= slot.startTime && end <= slot.endTime
-    final startsOnOrAfter = appointmentStart.isAfter(slot.startTime) || 
-    (appointmentStart.hour == slot.startTime.hour && appointmentStart.minute == slot.startTime.minute);
-    final endsOnOrBefore = appointmentEnd.isBefore(slot.endTime) || 
-   (appointmentEnd.hour == slot.endTime.hour && appointmentEnd.minute == slot.endTime.minute);
-    return startsOnOrAfter && endsOnOrBefore;
-  });
+      // start >= slot.startTime
+      final startsOnOrAfter = appointmentStart.isAfter(slot.startTime) ||
+          (appointmentStart.hour == slot.startTime.hour && appointmentStart.minute == slot.startTime.minute);
+
+      // end <= slot.endTime
+      final endsOnOrBefore = appointmentEnd.isBefore(slot.endTime) ||
+          (appointmentEnd.hour == slot.endTime.hour && appointmentEnd.minute == slot.endTime.minute);
+
+      return startsOnOrAfter && endsOnOrBefore;
+    });
   }
 
   // Check if appointment overlaps with existing booked slots
